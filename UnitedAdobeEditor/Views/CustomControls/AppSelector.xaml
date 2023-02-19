@@ -1,0 +1,150 @@
+﻿<local:ExtendedUserControl
+    x:Class="UnitedAdobeEditor.Views.CustomControls.AppSelector"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:UnitedAdobeEditor.Views.CustomControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="Montserrat"
+    mc:Ignorable="d">
+    <Grid
+        Name="grid"
+        Margin="10"
+        Cursor="Hand">
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="Grid.MouseEnter">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation
+                            Storyboard.TargetName="shadow"
+                            Storyboard.TargetProperty="(Color)"
+                            From="{StaticResource shadowColor}"
+                            To="{StaticResource hoverColor}"
+                            Duration="0:0:0.15">
+
+                            <ColorAnimation.EasingFunction>
+                                <BounceEase
+                                    Bounces="2"
+                                    Bounciness="2"
+                                    EasingMode="EaseInOut" />
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+
+                        <DoubleAnimation
+                            Storyboard.TargetName="scaleAnimation"
+                            Storyboard.TargetProperty="(ScaleX)"
+                            To="1.05"
+                            Duration="0:0:0.1">
+                            <DoubleAnimation.EasingFunction>
+                                <BounceEase
+                                    Bounces="2"
+                                    Bounciness="2"
+                                    EasingMode="EaseInOut" />
+                            </DoubleAnimation.EasingFunction>
+
+                        </DoubleAnimation>
+                        <DoubleAnimation
+                            Storyboard.TargetName="scaleAnimation"
+                            Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+                            To="1.05"
+                            Duration="0:0:0.1">
+                            <DoubleAnimation.EasingFunction>
+                                <BounceEase
+                                    Bounces="2"
+                                    Bounciness="2"
+                                    EasingMode="EaseInOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Grid.MouseLeave">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation
+                            Storyboard.TargetName="shadow"
+                            Storyboard.TargetProperty="(Color)"
+                            From="{StaticResource hoverColor}"
+                            To="{StaticResource shadowColor}"
+                            Duration="0:0:0.15">
+
+                            <ColorAnimation.EasingFunction>
+                                <BounceEase
+                                    Bounces="2"
+                                    Bounciness="2"
+                                    EasingMode="EaseInOut" />
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                        <DoubleAnimation
+                            Storyboard.TargetName="scaleAnimation"
+                            Storyboard.TargetProperty="(ScaleX)"
+                            To="1.0"
+                            Duration="0:0:0.1">
+                            <DoubleAnimation.EasingFunction>
+                                <BounceEase
+                                    Bounces="2"
+                                    Bounciness="2"
+                                    EasingMode="EaseInOut" />
+                            </DoubleAnimation.EasingFunction>
+
+                        </DoubleAnimation>
+                        <DoubleAnimation
+                            Storyboard.TargetName="scaleAnimation"
+                            Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+                            To="1.0"
+                            Duration="0:0:0.1">
+                            <DoubleAnimation.EasingFunction>
+                                <BounceEase
+                                    Bounces="2"
+                                    Bounciness="2"
+                                    EasingMode="EaseInOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+        <Grid.RenderTransform>
+            <ScaleTransform x:Name="scaleAnimation" CenterX="80" CenterY="100" ScaleX="1" ScaleY="1" />
+        </Grid.RenderTransform>
+        <Grid.Effect>
+            <DropShadowEffect
+                x:Name="shadow"
+                BlurRadius="13"
+                ShadowDepth="0"
+                Color="{StaticResource shadowColor}" />
+        </Grid.Effect>
+        <Border
+            Padding="15"
+            Background="Transparent"
+            CornerRadius="15">
+            <Grid Width="130" Height="170">
+                <Grid.Background>
+                    <ImageBrush
+                        x:Name="image"
+                        AlignmentY="Top"
+                        Stretch="Uniform" />
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    x:Name="text1"
+                    Grid.Row="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="15"
+                    Foreground="White"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap">
+                    Photoshop
+                </TextBlock>
+            </Grid>
+        </Border>
+
+
+
+    </Grid>
+</local:ExtendedUserControl>

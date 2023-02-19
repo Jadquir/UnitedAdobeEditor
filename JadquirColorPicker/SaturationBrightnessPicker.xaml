@@ -1,0 +1,36 @@
+﻿<UserControl
+    x:Class="JadColorPicker.SaturationBrightnessPicker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters1="clr-namespace:JadColorPicker.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="saturationBrightnessPicker"
+    d:DesignHeight="500"
+    d:DesignWidth="500"
+    x:ClassModifier="internal"
+    Background="Black"
+    SnapsToDevicePixels="True"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters1:HueToColorConverter x:Key="toHue" />
+    </UserControl.Resources>
+    <Rectangle>
+        <Rectangle.Fill>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Offset="0" Color="White" />
+                    <GradientStop Offset="1" Color="{Binding ElementName=saturationBrightnessPicker, Path=Hue, Converter={StaticResource toHue}, Mode=OneWay}" />
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+        </Rectangle.Fill>
+        <Rectangle.OpacityMask>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Offset="0" Color="#FFFFFFFF" />
+                    <GradientStop Offset="1" Color="#00000000" />
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+        </Rectangle.OpacityMask>
+    </Rectangle>
+</UserControl>

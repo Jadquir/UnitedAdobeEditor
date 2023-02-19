@@ -1,0 +1,144 @@
+﻿<ui:UiPage
+    x:Class="UnitedAdobeEditor.Views.Pages.About"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:customcontrols="clr-namespace:UnitedAdobeEditor.Views.CustomControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:UnitedAdobeEditor.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="About"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    FontFamily="Montserrat"
+    Style="{StaticResource UiPageScrollable}"
+    mc:Ignorable="d">
+
+    <Grid>
+        <TabControl>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Cursor="Hand">Update</TextBlock>
+                </TabItem.Header>
+                <StackPanel
+                    Margin="25"
+                    Cursor="Arrow"
+                    Orientation="Vertical">
+                    <StackPanel
+                        Margin="0,0,0,30"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Orientation="Vertical">
+                        <TextBlock FontSize="20" FontWeight="SemiBold">Updates</TextBlock>
+                        <Grid Margin="20,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <ui:Button
+                                x:Name="UpdateButton"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                Click="CheckUpdates"
+                                Cursor="Hand">
+                                Check Updates
+                            </ui:Button>
+                            <ui:ProgressRing
+                                x:Name="chekingUpdate"
+                                Grid.Column="1"
+                                Width="30"
+                                Height="30"
+                                Margin="0,0,10,0"
+                                AutomationProperties.IsOffscreenBehavior="Onscreen"
+                                IsIndeterminate="True"
+                                OverridesDefaultStyle="True"
+                                Progress="12"
+                                Visibility="Collapsed" />
+                            <TextBlock
+                                x:Name="UpdateText"
+                                Grid.Column="2"
+                                Margin="0,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="15">
+                                Current Version : 1.0
+                            </TextBlock>
+                        </Grid>
+                    </StackPanel>
+
+                    <TextBlock FontSize="20" FontWeight="SemiBold">Update Changelog</TextBlock>
+
+                    <StackPanel x:Name="changelog" />
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Cursor="Hand">About</TextBlock>
+                </TabItem.Header>
+                <StackPanel
+                    Margin="25"
+                    Cursor="Arrow"
+                    Orientation="Vertical">
+                    <StackPanel Margin="0,0,0,30">
+                        <TextBlock FontSize="20" FontWeight="SemiBold">About</TextBlock>
+                        <StackPanel Margin="20,15,0,0">
+                            <TextBlock Margin="0,0,0,10" FontSize="15">This application made by Emircan 'Jadquir' Gezer.</TextBlock>
+                            <TextBlock Margin="0,0,0,10" FontSize="15">You can contact with the developer by the links down below.</TextBlock>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="0,4,10,0" FontSize="14">Powered by</TextBlock>
+                                    <ui:Hyperlink
+                                        Content="WPF UI"
+                                        Cursor="Hand"
+                                        FontSize="14"
+                                        NavigateUri="https://wpfui.lepo.co/" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="0,4,10,0" FontSize="14">Color Picker Source :</TextBlock>
+                                    <ui:Hyperlink
+                                        Content="WPF Color Picker"
+                                        Cursor="Hand"
+                                        FontSize="14"
+                                        NavigateUri="https://github.com/dsafa/wpf-color-picker" />
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock FontSize="20" FontWeight="SemiBold">Contact / Socials</TextBlock>
+                        <Grid Margin="20,15,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <customcontrols:LinkButton
+                                    x:Name="youtubeButton"
+                                    Grid.Column="0"
+                                    Margin="0,0,30,0"
+                                    ToolTip="Youtube" />
+                                <customcontrols:LinkButton
+                                    x:Name="websiteButton"
+                                    Grid.Column="1"
+                                    Margin="0,0,30,0"
+                                    ToolTip="Website" />
+                                <customcontrols:LinkButton
+                                    x:Name="discordButton"
+                                    Grid.Column="2"
+                                    Margin="0,0,30,0"
+                                    ToolTip="Discord Server" />
+                                <customcontrols:LinkButton
+                                    x:Name="itchioButton"
+                                    Grid.Column="3"
+                                    Margin="0,0,30,0"
+                                    ToolTip="Itch.io" />
+                                <customcontrols:LinkButton
+                                    x:Name="mailButton"
+                                    Grid.Column="4"
+                                    Margin="0,0,30,0"
+                                    ToolTip="Mail" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+
+            </TabItem>
+        </TabControl>
+    </Grid>
+</ui:UiPage>
