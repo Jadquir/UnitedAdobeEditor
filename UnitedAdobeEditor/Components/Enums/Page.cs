@@ -10,7 +10,6 @@
         SplashScreenChanger,
         AdvancedColors,
         Loading,
-        About,
-        SSCreator
+        About
     }
 }

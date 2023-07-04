@@ -26,7 +26,7 @@
                 R="73" />
             <SolidColorBrush
                 x:Key="secBrush"
-                Opacity="0.65"
+                Opacity="0.15"
                 Color="#2F2E33" />
             <SolidColorBrush
                 x:Key="threBrush"
@@ -34,7 +34,7 @@
                 Color="#1F1F23" />
             <SolidColorBrush
                 x:Key="thiBrush"
-                Opacity="0.4"
+                Opacity="0.15"
                 Color="#46474F" />
             <Color
                 x:Key="secondaryColor"

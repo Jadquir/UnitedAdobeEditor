@@ -28,7 +28,7 @@
         <ui:VirtualizingItemsControl
             x:Name="list1"
             Grid.Row="1"
-            Margin="0,0,0,15"
+            Margin="0,0,0,25"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Top"
             VirtualizingPanel.CacheLengthUnit="Pixel"

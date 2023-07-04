@@ -63,7 +63,7 @@ namespace UnitedAdobeEditor.Components
         private static string GetOnlyFolder(string path)
         {
             if (IsDirectory(path)) { return path; }
-            string value = System.IO.Path.GetDirectoryName(path);
+            string value = System.IO.Path.GetDirectoryName(path) ?? "";
             return value;
 
         }
@@ -103,29 +103,27 @@ namespace UnitedAdobeEditor.Components
             bitmap.Freeze();
             LoadedImages[filepath] = bitmap;
             return bitmap;
-        }/*
-        public static System.Drawing.Image ToDrawingImage(this BitmapImage img)
-        {
-            using(var ms = new MemoryStream())
-            {
-              //  ms.w
-            }
-            return null;
         }
-        public static BitmapImage ToWpfImage(this System.Drawing.Image img)
+        public static BitmapImage ImageFromResource(string relativePath)
         {
-            MemoryStream ms = new MemoryStream();  // no using here! BitmapImage will dispose the stream after loading
-            img.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            if (LoadedImages.TryGetValue(relativePath, out BitmapImage image)) { return image; }
 
-            BitmapImage ix = new BitmapImage();
-            ix.BeginInit();
-            ix.CacheOption = BitmapCacheOption.OnLoad;
-            ix.StreamSource = ms;
-            ix.EndInit();
-            ix.Freeze();
-            return ix;
-        }*/
-
+            try
+            {
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri($"pack://application:,,,/{relativePath}");
+                bitmap.EndInit();
+                LoadedImages[relativePath] = bitmap;
+                return bitmap;
+            }
+            catch (Exception ex)
+            {
+                // handle the exception here
+                Debug.WriteLine("An error occurred FromResource: " + ex.Message);
+                return null;
+            }
+        }
         public static async Task RunBackground(Task action)
         {
             BackgroundWorker worker = new BackgroundWorker();

@@ -41,12 +41,8 @@ namespace UnitedAdobeEditor.Views.CustomControls
            
             if (!String.IsNullOrWhiteSpace(name))
             {
-                string file = "./Images/Logos/" + name;
-                if (!(new FileInfo(file).Exists))
-                {
-                    return;
-                }
-                image.ImageSource = Misc.ImageFromFile(file);
+                string file = "Images/Logos/" + name;
+                image.ImageSource = Misc.ImageFromResource(file);
             }
 
         }

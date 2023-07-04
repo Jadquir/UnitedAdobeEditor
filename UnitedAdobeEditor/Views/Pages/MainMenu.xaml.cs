@@ -29,14 +29,8 @@ namespace UnitedAdobeEditor.Views.Pages
 
             foreach (AdobeType apptype in ((AdobeType[])Enum.GetValues(typeof(AdobeType))))
             {
-                var box = new AppSelector(apptype);
-                list1.Items.Add(box);
+                list1.Items.Add(new AppSelector(apptype));
             }
-            /*
-            list1.Items.Add(new VersionCard(new Components.Classes.SelectedPath()));
-            list1.Items.Add(new VersionCard(new Components.Classes.SelectedPath()));
-            list1.Items.Add(new VersionCard(new Components.Classes.SelectedPath()));
-            list1.Items.Add(new VersionCard(new Components.Classes.SelectedPath()));*/
         }
     }
 }

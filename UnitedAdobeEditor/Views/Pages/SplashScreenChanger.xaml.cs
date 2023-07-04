@@ -29,7 +29,7 @@ namespace UnitedAdobeEditor.Views.Pages
         {
             InitializeComponent();
 
-            this.image.Source = Misc.ImageFromFile("./Images/SplashScreenImport.png");
+            this.image.Source = Misc.ImageFromResource("Images/SplashScreenImport.png");
             Debug.WriteLine(image.Source);
             imageHolder.OnClick += async (s, e) =>
             {

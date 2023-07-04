@@ -14,7 +14,7 @@ namespace UnitedAdobeEditor.Components.Classes
         {
             foreach (AdobeType apptype in (AdobeType[])Enum.GetValues(typeof(AdobeType)))
             {
-                selectedPaths[apptype] = new List<string>().ToArray();
+                selectedPaths[apptype] = Array.Empty<string>();
             }
         }
         public Dictionary<AdobeType, string[]> selectedPaths = new Dictionary<AdobeType, string[]>();

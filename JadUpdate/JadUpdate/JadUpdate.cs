@@ -45,7 +45,7 @@ namespace JadUpdate
                     e.Cancel = true;
                     return;
                 }
-                UpdateData data = null;
+                UpdateData? data = null;
                 try
                 {
                     string response = JadWebRequest.JadWebRequest.Get(url);

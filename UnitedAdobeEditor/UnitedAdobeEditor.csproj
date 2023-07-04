@@ -13,15 +13,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Logos\after_effects.png" />
+    <None Remove="Images\Logos\animate.png" />
+    <None Remove="Images\Logos\audition.png" />
+    <None Remove="Images\Logos\ch_animator.png" />
+    <None Remove="Images\Logos\dreamweaver.png" />
+    <None Remove="Images\Logos\illustrator.png" />
+    <None Remove="Images\Logos\incopy.png" />
+    <None Remove="Images\Logos\indesign.png" />
+    <None Remove="Images\Logos\lightroom.png" />
+    <None Remove="Images\Logos\lightroomclassic.png" />
+    <None Remove="Images\Logos\mediaencoder.png" />
+    <None Remove="Images\Logos\photoshop.png" />
+    <None Remove="Images\Logos\premiere_pro.png" />
+    <None Remove="Images\SplashScreenImport.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Alienware-Emblem.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="PixiEditor.ColorPicker" Version="3.3.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PShop.CC.IconResources" Version="1.0.0" />
     <PackageReference Include="Vestris.ResourceLib" Version="2.1.0" />
-    <PackageReference Include="WPF-UI" Version="2.0.2" />
+    <PackageReference Include="WPF-UI" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,84 +46,51 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Images\Logos\after_effects.png">
+    <Resource Include="Images\Logos\after_effects.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\animate.png">
+    </Resource>
+    <Resource Include="Images\Logos\animate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\audition.png">
+    </Resource>
+    <Resource Include="Images\Logos\audition.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\ch_animator.png">
+    </Resource>
+    <Resource Include="Images\Logos\ch_animator.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\dreamweaver.png">
+    </Resource>
+    <Resource Include="Images\Logos\dreamweaver.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\illustrator.png">
+    </Resource>
+    <Resource Include="Images\Logos\illustrator.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\incopy.png">
+    </Resource>
+    <Resource Include="Images\Logos\incopy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\indesign.png">
+    </Resource>
+    <Resource Include="Images\Logos\indesign.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\lightroom.png">
+    </Resource>
+    <Resource Include="Images\Logos\lightroom.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\lightroomclassic.png">
+    </Resource>
+    <Resource Include="Images\Logos\lightroomclassic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\mediaencoder.png">
+    </Resource>
+    <Resource Include="Images\Logos\mediaencoder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\photoshop.png">
+    </Resource>
+    <Resource Include="Images\Logos\photoshop.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\premiere_pro.png">
+    </Resource>
+    <Resource Include="Images\Logos\premiere_pro.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\after_effects.png">
+    </Resource>
+    <Resource Include="Images\SplashScreenImport.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\animate.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\audition.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\ch_animator.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\dreamweaver.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\illustrator.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\incopy.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\indesign.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\lightroom.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\lightroomclassic.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\mediaencoder.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\photoshop.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\Logos\premiere_pro.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Images\SplashScreenCreator\Background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -118,9 +101,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Images\SplashScreenCreator\LogoText\Adobe Logo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Images\SplashScreenImport.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

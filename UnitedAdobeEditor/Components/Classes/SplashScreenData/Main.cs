@@ -36,7 +36,7 @@ namespace UnitedAdobeEditor.Components.Classes.SplashScreenData
             public List<ImageDataBase> ResourceData;
 
         }
-        public static List<AdobeApp> AdobeAppList = new List<AdobeApp>()
+        private static readonly List<AdobeApp> AdobeAppList = new List<AdobeApp>()
         {
             new AdobeApp(AdobeType.Photoshop,"Photoshop.exe",ChangerType.Photoshop,null,"photoshop.png",null),
 
@@ -91,10 +91,11 @@ namespace UnitedAdobeEditor.Components.Classes.SplashScreenData
                 },"ch_animator.png",null),
             new AdobeApp(AdobeType.Audition,"AuUI.dll",ChangerType.ResourceHacker,new List<ImageDataBase>()
                 {
-                    new ResourceImageData("AU_SPLASH","PNG",new System.Drawing.Size(750,500)),
-                    new ResourceImageData("AU_SPLASH_AT_3TO2X","PNG",new System.Drawing.Size(1125,750)),
-                    new ResourceImageData("AU_SPLASH_AT_2X","PNG",new System.Drawing.Size(1500,1000)),
-                },"audition.png","This file should be in where Audition.exe located."),
+                    new ResourceImageData("AU_SPLASH","PNG",new System.Drawing.Size(750,500),"AU2023_SPLASH"),
+                    new ResourceImageData("AU_SPLASH_AT_3TO2X","PNG",new System.Drawing.Size(1125,750),"AU2023_SPLASH_AT_3TO2X"),
+                    new ResourceImageData("AU_SPLASH_AT_2X","PNG",new System.Drawing.Size(1500,1000),"AU2023_SPLASH_AT_2X"),
+                },"audition.png","This file should be in where Audition.exe located."
+                ),
             new AdobeApp(AdobeType.Lightroom,"lightroom.exe",ChangerType.ResourceHacker, new List<ImageDataBase>()
                 {
                     new ResourceImageData("LR_SPLASH.PNG","PNG",new System.Drawing.Size(750,500)),
@@ -128,147 +129,5 @@ namespace UnitedAdobeEditor.Components.Classes.SplashScreenData
             }
             return app;
         }
-
-
-        /*
-
-        public static Dictionary<AdobeType, string> FileNames = new Dictionary<AdobeType, string>()
-        {
-            {AdobeType.Photoshop,"Photoshop.exe" },
-            {AdobeType.Illustrator,"Illustrator.exe" },
-            {AdobeType.PremierePro,"Adobe Premiere Pro.exe" },
-            {AdobeType.Animate, "Animate.exe" },
-            {AdobeType.AfterEffects,"AfterFXLib.dll" },
-            {AdobeType.LightroomClassic,"Lightroom.exe" },
-            {AdobeType.Lightroom,"lightroom.exe" },
-            {AdobeType.MediaEncoder,"Adobe Media Encoder.exe" },
-            {AdobeType.Audition,"AuUI.dll" },
-            {AdobeType.InDesign,"InDesign.exe" },
-            {AdobeType.Dreamweaver,"Resources.dll" },
-        };
-        public static Dictionary<AdobeType, ChangerType> SplashScreenChangerType = new Dictionary<AdobeType, ChangerType>()
-        {
-            {AdobeType.Photoshop, ChangerType.Photoshop },
-
-            {AdobeType.Illustrator,ChangerType.Normal},
-            {AdobeType.PremierePro,ChangerType.Normal },
-            {AdobeType.InDesign,ChangerType.Normal},
-
-            {AdobeType.Animate, ChangerType.ResourceHacker },
-            {AdobeType.AfterEffects,ChangerType.ResourceHacker },
-            {AdobeType.LightroomClassic,ChangerType.ResourceHacker },
-            {AdobeType.Lightroom,ChangerType.ResourceHacker},
-            {AdobeType.MediaEncoder, ChangerType.ResourceHacker},
-            {AdobeType.Audition,ChangerType.ResourceHacker},
-            {AdobeType.Dreamweaver,ChangerType.ResourceHacker},
-        }; 
-        public static Dictionary<AdobeType, string> PathSelectorComments = new Dictionary<AdobeType, string>()
-        {
-            {AdobeType.AfterEffects,"This file should be in where AfterFX.exe located." },
-            {AdobeType.Audition,"This file should be in where Audition.exe located." },
-            {AdobeType.Dreamweaver,"This file should be in [Installed Directory]/[Your locale (ex. en_US)]/Resources/." },
-        };
-
-        public static Dictionary<AdobeType, List<NormalImageData>> NormalDataKeys = new Dictionary<AdobeType, List<NormalImageData>>()
-        {
-            {
-                AdobeType.PremierePro ,
-                new List<NormalImageData>()
-                {
-                    new NormalImageData("pr_splash.png","PNG",new System.Drawing.Size(750,500)),
-                    new NormalImageData("pr_splash@2x.png","PNG",new System.Drawing.Size(1500,1000)),
-                    new NormalImageData("pr_splash@3to2x.png","PNG",new System.Drawing.Size(1125,750))
-                }
-            },
-            {
-                AdobeType.Illustrator,
-                new List<NormalImageData>()
-                {
-                    new NormalImageData("ai_cc_splash.png","",new System.Drawing.Size(750,500)),
-                    new NormalImageData("ai_cc_splash@2x.png","",new System.Drawing.Size(1500,1000)),
-                    new NormalImageData("ai_cc_splash@3to2x.png","",new System.Drawing.Size(1125,750))
-                }
-            },
-            {
-                AdobeType.InDesign ,
-                new List<NormalImageData>()
-                {
-                    new NormalImageData("400.idrc","(InDesign Resources)\\idrc_PNGA",new System.Drawing.Size(750,500)),
-                    new NormalImageData("6400.idrc","(InDesign Resources)\\idrc_PNGA",new System.Drawing.Size(1500,1000)),
-                    new NormalImageData("12400.idrc","(InDesign Resources)\\idrc_PNGA",new System.Drawing.Size(1125,750))
-                }
-            }
-        };
-
-       public static Dictionary<AdobeType, List<ResourceImageData>> ResourceDataKeys = new Dictionary<AdobeType, List<ResourceImageData>>()
-        {
-            {
-                AdobeType.Animate ,
-                new List<ResourceImageData>()
-                {
-                    new ResourceImageData("AN_SPLASH","PNG",new System.Drawing.Size(750,500)),
-                    new ResourceImageData("AN_SPLASH_AT_2X","PNG",new System.Drawing.Size(1500,1000)),
-                    new ResourceImageData("AN_SPLASH_AT_3TO2X","PNG",new System.Drawing.Size(1125,750)),
-                }
-            },
-            {
-                AdobeType.AfterEffects ,
-                new List<ResourceImageData>()
-                {
-                    new ResourceImageData("AE_SPLASH","PNG",new System.Drawing.Size(750,500)),
-                    new ResourceImageData("AE_SPLASH_AT_2X","PNG",new System.Drawing.Size(1500,1000)),
-                    new ResourceImageData("AE_SPLASH_AT_3TO2X","PNG",new System.Drawing.Size(1125,750)),
-                }
-            },
-            {
-                AdobeType.Lightroom ,
-                new List<ResourceImageData>()
-                {
-                    new ResourceImageData("LR_SPLASH.PNG","PNG",new System.Drawing.Size(750,500)),
-                    new ResourceImageData("LR_SPLASH~1.5X.PNG","PNG",new System.Drawing.Size(1125,750)),
-                    new ResourceImageData("LR_SPLASH~2.5X.PNG","PNG",new System.Drawing.Size(1875,1250)),
-                    new ResourceImageData("LR_SPLASH~2X.PNG","PNG",new System.Drawing.Size(1500,1000)),
-                }
-            },
-            {
-                AdobeType.LightroomClassic ,
-                new List<ResourceImageData>()
-                {
-                    new ResourceImageData("LRC_SPLASH.PNG","PNG",new System.Drawing.Size(750,500)),
-                    new ResourceImageData("LRC_SPLASH~1.5X.PNG","PNG",new System.Drawing.Size(1125,750)),
-                    new ResourceImageData("LRC_SPLASH~2.5X.PNG","PNG",new System.Drawing.Size(1875,1250)),
-                    new ResourceImageData("LRC_SPLASH~2X.PNG","PNG",new System.Drawing.Size(1500,1000)),
-                }
-            },
-            {
-                AdobeType.MediaEncoder ,
-                new List<ResourceImageData>()
-                {
-                    new ResourceImageData("LAUNCHAMEBACKGROUND","PNG",new System.Drawing.Size(750,500)),
-                    new ResourceImageData("LAUNCHAMEBACKGROUND_AT_3TO2X","PNG",new System.Drawing.Size(1125,750)),
-                    new ResourceImageData("LAUNCHAMEBACKGROUND_AT_2X","PNG",new System.Drawing.Size(1500,1000)),
-                }
-            },
-            {
-                AdobeType.Audition,
-                new List<ResourceImageData>()
-                {
-                    new ResourceImageData("AU_SPLASH","PNG",new System.Drawing.Size(750,500)),
-                    new ResourceImageData("AU_SPLASH_AT_3TO2X","PNG",new System.Drawing.Size(1125,750)),
-                    new ResourceImageData("AU_SPLASH_AT_2X","PNG",new System.Drawing.Size(1500,1000)),
-                }
-            },
-            {
-                AdobeType.Dreamweaver,
-                new List<ResourceImageData>()
-                {
-                    new ResourceImageData("SPLASHNORMAL","PNG",new System.Drawing.Size(750,500)),
-                    new ResourceImageData("SPLASHNORMAL_AT_3TO2X","PNG",new System.Drawing.Size(1125,750)),
-                    new ResourceImageData("SPLASHNORMAL_AT_2X","PNG",new System.Drawing.Size(1500,1000)),
-                }
-            }
-        };
-
-     */
     }
 }

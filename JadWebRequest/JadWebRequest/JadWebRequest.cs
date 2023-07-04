@@ -1,115 +1,96 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 
 namespace JadWebRequest
 {
     public class JadWebRequest
     {
-        private static System.Net.WebRequest Create(string url)
-        {
-            return System.Net.WebRequest.Create(url);
-        }
-        public static async Task<string> GetAsync(string uri)
-        {
-            HttpWebRequest request = (HttpWebRequest)JadWebRequest.Create(uri);
+        private static readonly HttpClient _httpClient = new();
 
-            using (HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync()))
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
+        private static void WriteExceptions(Exception? ex)
+        {
+            while (ex is not null)
             {
+                Debug.WriteLine($"[JadHttp] Exceptions: {ex.Message}");
+                ex = ex.InnerException;
+            }
+        }
+        public static string Send(HttpRequestMessage requestMessage)
+        {
+            if (requestMessage is null) throw new ArgumentNullException(nameof(requestMessage));
+
+            try
+            {
+                var response = _httpClient.Send(requestMessage);
+                using var reader = new StreamReader(response.Content.ReadAsStream());
                 return reader.ReadToEnd();
             }
-        }
-        public static string Get(string uri)
-        {
-            HttpWebRequest request = (HttpWebRequest)JadWebRequest.Create(uri);
-
-            using (HttpWebResponse response = (HttpWebResponse)(request.GetResponse()))
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
+            catch (HttpRequestException ex)
             {
-                return reader.ReadToEnd();
+                WriteExceptions(ex);
             }
-        }
-        public static async Task<string> PostAsync(string uri, StringContent data1, string method = "POST", string contentType = "application/json")
-        {
-            var request = (HttpWebRequest)JadWebRequest.Create(uri);
-
-            var postData = data1;
-            var data = Encoding.ASCII.GetBytes(postData.ToString());
-
-            request.Method = method;
-            request.ContentType = contentType;
-            request.ContentLength = data.Length;
-
-            using (var stream = await request.GetRequestStreamAsync())
+            catch (Exception ex)
             {
-                stream.Write(data, 0, data.Length);
+                WriteExceptions(ex);
             }
-
-            var response = (HttpWebResponse)(await request.GetResponseAsync());
-            var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-            return responseString;
-
+            return string.Empty;
         }
-        public static string Post(string uri, StringContent data1, string method = "POST", string contentType = "application/json")
+        public static async Task<string> SendAsync(HttpRequestMessage requestMessage)
         {
-            var request = (HttpWebRequest)JadWebRequest.Create(uri);
+            if (requestMessage is null) throw new ArgumentNullException(nameof(requestMessage));
 
-            var postData = data1;
-            var data = Encoding.ASCII.GetBytes(postData.ToString());
-
-            request.Method = method;
-            request.ContentType = contentType;
-            request.ContentLength = data.Length;
-
-            using (var stream = request.GetRequestStream())
+            try
             {
-                stream.Write(data, 0, data.Length);
+                var response = await _httpClient.SendAsync(requestMessage);
+                using var reader = new StreamReader(await response.Content.ReadAsStreamAsync());
+                return await reader.ReadToEndAsync();
             }
-
-            var response = (HttpWebResponse)(request.GetResponse());
-            var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-            return responseString;
-
+            catch (HttpRequestException ex)
+            {
+                WriteExceptions(ex);
+            }
+            catch (Exception ex)
+            {
+                WriteExceptions(ex);
+            }
+            return string.Empty;
         }
 
+        public static HttpClient GetClient() => _httpClient;
 
-    }
-    public partial class JadWebRequest1
-    {
-        public bool IsGetting { get; private set; } = false;
-
-        public async Task<string> GetAsync(string uri)
+        public static string Get(string url)
         {
-            IsGetting = true;
-            var result = await JadWebRequest.GetAsync(uri);
-            IsGetting = false;
-            return result;
+            if (string.IsNullOrEmpty(url))
+                return string.Empty;
+            using var request = new HttpRequestMessage(HttpMethod.Get, url);
+            return Send(request);
         }
-        public string Get(string uri)
+        public static async Task<string> GetAsync(string url)
         {
-            IsGetting = true;
-            var result = JadWebRequest.Get(uri);
-            IsGetting = false;
-            return result;
+            if (string.IsNullOrEmpty(url))
+                return string.Empty;
+            using var request = new HttpRequestMessage(HttpMethod.Get, url);
+            return await SendAsync(request);
         }
-        public async Task<string> PostAsync(string uri, StringContent data1, string method = "POST", string contentType = "application/json")
+        public static async Task<string> PostAsync(string url, HttpContent content)
         {
+            if (string.IsNullOrEmpty(url))
+                return string.Empty;
+            if (content is null) throw new ArgumentNullException(nameof(content));
 
-            IsGetting = true;
-            var result = await JadWebRequest.PostAsync(uri, data1, method, contentType);
-            IsGetting = false;
-            return result;
-
+            using var request = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
+            return await SendAsync(request);
         }
-        public string Post(string uri, StringContent data1, string method = "POST", string contentType = "application/json")
+        public static string Post(string url, HttpContent content)
         {
-            IsGetting = true;
-            var result = JadWebRequest.Post(uri, data1, method, contentType);
-            IsGetting = false;
-            return result;
-        }
+            if (string.IsNullOrEmpty(url))
+                return string.Empty;
+            if (content is null) throw new ArgumentNullException(nameof(content));
 
+            using var request = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
+            return Send(request);
+        }
     }
 }

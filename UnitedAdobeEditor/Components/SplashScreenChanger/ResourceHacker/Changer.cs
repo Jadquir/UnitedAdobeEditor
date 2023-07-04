@@ -147,13 +147,15 @@ namespace UnitedAdobeEditor.Components.SplashScreenChanger.ResourceHacker
                 {
                     vi.Load(CurrentOperation.SelectedPath.EXEFilePath);
 
+                    // Find all the parent folder inside the resource
                     var id = vi.ResourceTypes.Find(x => x.Name == ((ResourceImageData)resourceData[0]).Parent);
 
-                    var list = vi.Resources[id].FindAll(x => resourceData.Any(y => y.Name == x.Name.Name));
+                    // Get all the resource files from the parent if the name matches
+                    var list = vi.Resources[id].FindAll(x => resourceData.Any(y => ((ResourceImageData)y).PossibleNames.Contains(x.Name.Name)));
 
                     foreach (GenericResource resource in list)
                     {
-                        var data = resourceData.Find(x => x.Name == resource.Name.Name);
+                        var data = resourceData.Find(x => ((ResourceImageData)x).PossibleNames.Contains(resource.Name.Name));
                         if (data == null)
                         {
                             Debug.WriteLine("ResourceName : " + resource.Name.Name);

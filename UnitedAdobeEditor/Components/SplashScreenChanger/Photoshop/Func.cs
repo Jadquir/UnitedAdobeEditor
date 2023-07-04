@@ -12,7 +12,6 @@ namespace UnitedAdobeEditor.Components.SplashScreenChanger.Photoshop
 {
     internal class Func
     {
-
         public static void Pack(string inputPath, string outputPath, string indexFilename = "IconResources.idx")
         {
             Directory.CreateDirectory(Path.Combine(outputPath));

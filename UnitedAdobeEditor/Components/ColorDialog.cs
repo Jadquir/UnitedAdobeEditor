@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using Color = System.Windows.Media.Color;
+﻿using Color = System.Windows.Media.Color;
 
 namespace UnitedAdobeEditor.Components
 {
@@ -16,6 +8,13 @@ namespace UnitedAdobeEditor.Components
         {
             var dialog = new JadColorPicker.ColorDialog(OldColor);
             dialog.Owner = MainWindow.Instance;
+            dialog.ContentRendered += (s, e) =>
+            {
+                Wpf.Ui.Appearance.Background.Apply(dialog, Wpf.Ui.Appearance.Background.IsSupported(Wpf.Ui.Appearance.BackgroundType.Mica)
+               ? Wpf.Ui.Appearance.BackgroundType.Mica :
+               Wpf.Ui.Appearance.BackgroundType.None);
+            };
+           
             dialog.ShowDialog();
 
             return (dialog.IsSelected, dialog.SelectedColor);

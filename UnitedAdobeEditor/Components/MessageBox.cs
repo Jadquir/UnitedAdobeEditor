@@ -16,13 +16,13 @@ namespace UnitedAdobeEditor.Components
             string message,
 
             string LeftButtonText = "OK",
-            RoutedEventHandler LeftButtonClick = null,
+            RoutedEventHandler? LeftButtonClick = null,
 
             string RightButtonText = "Cancel",
-            RoutedEventHandler RightButtonClick = null,
+            RoutedEventHandler? RightButtonClick = null,
 
             bool LeftPrimary = true,
-            string title = null)
+            string? title = null)
         {
             Wpf.Ui.Controls.MessageBox mb = new Wpf.Ui.Controls.MessageBox();
 
@@ -30,8 +30,8 @@ namespace UnitedAdobeEditor.Components
             mb.ButtonRightName = RightButtonText;
 
             mb.Content = message;
-            if (title == null)
-                title = App.Name;
+
+            title ??= App.Name;
             mb.Title = title;
 
             LeftButtonClick += (s, e) => { mb.Close(); };
@@ -47,13 +47,13 @@ namespace UnitedAdobeEditor.Components
         }
 
 
-        private static RoutedEventHandler Old1,Old2;
+        private static RoutedEventHandler? Old1,Old2;
 
         public static async Task ShowYesNo(string message,
-            RoutedEventHandler YesClick = null,
-            RoutedEventHandler NoClick = null,
+            RoutedEventHandler? YesClick = null,
+            RoutedEventHandler? NoClick = null,
             bool YesPrimary = true,
-            string title = null)
+            string? title = null)
         {
             await ShowDialog(message, "No", NoClick, "Yes", YesClick, YesPrimary, title);
         }
@@ -65,15 +65,14 @@ namespace UnitedAdobeEditor.Components
         public static async Task ShowDialog(string message,
 
             string RightButtonText = "OK",
-            RoutedEventHandler RightButtonClick = null,
+            RoutedEventHandler? RightButtonClick = null,
 
             string LeftButtonText = "",
-            RoutedEventHandler LeftButtonClick = null,
+            RoutedEventHandler? LeftButtonClick = null,
 
             bool LeftPrimary = false,
-            string title = null)
+            string? title = null)
         {
-            bool continueWorking = false;
             await MainWindow.Instance.Dispatcher.Invoke(async () => {
                 Dialog dialog = MainWindow.Instance.GetDialog();
 
@@ -90,10 +89,7 @@ namespace UnitedAdobeEditor.Components
                 dialog.Message = message;
 
 
-                if (title == null)
-                {
-                    title = App.Name;
-                }
+                title ??= App.Name;
                 dialog.Title = title;
 
                 LeftButtonClick += (s, e) => { Debug.WriteLine("Left Click"); dialog.Hide(); };
@@ -112,9 +108,6 @@ namespace UnitedAdobeEditor.Components
                 dialog.ButtonLeftAppearance = LeftPrimary ? Wpf.Ui.Common.ControlAppearance.Primary : Wpf.Ui.Common.ControlAppearance.Secondary;
 
                 await dialog.ShowAndWaitAsync();
-
-
-                continueWorking = true;
             });
             
         }

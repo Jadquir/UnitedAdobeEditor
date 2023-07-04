@@ -12,6 +12,5 @@ namespace UnitedAdobeEditor.Components.Enums
         LightGray = 3,
         DarkGray = 4,   
         Dark = 5
-
     }
 }
