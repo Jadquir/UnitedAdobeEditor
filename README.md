@@ -23,7 +23,8 @@ You can do the following things with this application:
 
 # Contribution
  If you want to contribute to this project. Please use the **development** branch.
- If you want to add or update Adobe App configs go [Here](https://github.com/Jadquir/UnitedAdobeEditor/blob/master/UnitedAdobeEditor/Components/Classes/SplashScreenData/Main.cs "Here")
+ If you want to add or update Adobe App configs go [Here](https://github.com/Jadquir/UnitedAdobeEditor/blob/master/UnitedAdobeEditor/Components/Classes/SplashScreenData/Main.cs "Here").
+
  It's been a while since I coded this app so I know the code is kind of spaghetti.
 
 # Download
