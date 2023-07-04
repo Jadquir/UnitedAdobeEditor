@@ -1,7 +1,7 @@
 # UnitedAdobeEditor
 United Adobe Editor is an open-source UI Color/Splash Screen Editor for Adobe Applications. 
 
-You can do following things with this application:
+You can do the following things with this application:
 
 **Change the UI Color of**
 - Adobe Photoshop
@@ -21,13 +21,15 @@ You can do following things with this application:
 - Adobe InCopy 
 - Adobe Character Animator 
 
+# Contribution
+ If you want to contribute to this project. Please use the **development** branch.
+ It's been a while since I coded this app so I know the code is kind of spaghetti
+
 # Download
 You can download it from Itch.io: https://jadquir.itch.io/united-adobe-editor
 
 # Donate
-If you liked my work and wannt to support me you can buy me a coffee: https://www.buymeacoffee.com/Jadquir
+If you liked my work and want to support me you can buy me a coffee: https://www.buymeacoffee.com/Jadquir
 
-# Contribution
- If you want to contribute to this project. Please use **development** branch.
- Its been while since I coded this app so I know the code is kind of spaghetti
-
+# Other
+You can check my other work MRA, Music Recognition application for PC. So it is Shazam Client for PC: https://jadquir.xyz/mra/
