@@ -72,8 +72,13 @@ namespace UnitedAdobeEditor.Views.Pages
             if (CurrentOperation.AppType == AdobeType.Photoshop)
             {
                 colorboxes.Children.Clear();
-                colorboxes.Children.Add(BGColor = new AdvancedColorBox(SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.BackgroundColor]));
-                colorboxes.Children.Add(FGColor = new AdvancedColorBox(SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.TextColor]));
+
+                static AdvancedColorBox Create(Components.ColorChanger.ColorHolder colorHolder)
+                {
+                    return new AdvancedColorBox(colorHolder,false);
+                }
+                colorboxes.Children.Add(BGColor = Create(SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.BackgroundColor]));
+                colorboxes.Children.Add(FGColor = Create(SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.TextColor]));
                 colorboxes.Visibility = Visibility.Visible;
             }
             SaveData.Load();

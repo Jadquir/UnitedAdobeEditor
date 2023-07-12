@@ -110,7 +110,7 @@
             Orientation="Horizontal">
             <customcontrols:ExtendedBorder
                 x:Name="devText"
-                Padding="10,5,10,10"
+                Padding="10,0"
                 Background="Transparent"
                 BorderBrush="Transparent"
                 Cursor="Hand">

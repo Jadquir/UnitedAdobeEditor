@@ -22,15 +22,27 @@ namespace UnitedAdobeEditor.Views.CustomControls
             CornerRadius = new CornerRadius(10);
         }
 
+
+        public bool EnableChangeBgColor
+        {
+            get { return (bool)GetValue(EnableChangeBgColorProperty); }
+            set { SetValue(EnableChangeBgColorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EnableChangeBgColor.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EnableChangeBgColorProperty =
+            DependencyProperty.Register("EnableChangeBgColor", typeof(bool), typeof(ExtendedBorder), new PropertyMetadata(true));
+
+
         bool isDarkMode => Wpf.Ui.Appearance.Theme.GetAppTheme() == Wpf.Ui.Appearance.ThemeType.Dark;
         public void ChangeColor(bool isOver, bool isMouseDown)
         {
+            if (!EnableChangeBgColor) return;
             string key = "#00000000";
             if (isMouseDown)
                 key = "#08FFFFFF";
             else if (isOver)
                 key = "#15FFFFFF";
-
             this.Background = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(key));
         }
 

@@ -36,8 +36,8 @@ namespace UnitedAdobeEditor.Views.CustomControls
             title1.Text = colorData.Name;
 
             colorSelect.Background = new SolidColorBrush(colorData.Color.ToMediaColor());
+            colorSelect.EnableChangeBgColor = false;
 
-            
             numberBox.Value = colorData.Opacity;
 
             colorSelect.OnClick += (o, e) =>
