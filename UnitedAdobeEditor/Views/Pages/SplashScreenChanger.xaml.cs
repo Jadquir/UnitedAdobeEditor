@@ -75,7 +75,7 @@ namespace UnitedAdobeEditor.Views.Pages
 
                 static AdvancedColorBox Create(Components.ColorChanger.ColorHolder colorHolder)
                 {
-                    return new AdvancedColorBox(colorHolder,false);
+                    return new AdvancedColorBox(colorHolder);
                 }
                 colorboxes.Children.Add(BGColor = Create(SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.BackgroundColor]));
                 colorboxes.Children.Add(FGColor = Create(SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.TextColor]));
