@@ -16,7 +16,7 @@ namespace UnitedAdobeEditor
     {
         public static readonly string Name = "United Adobe Editor";
 
-        public static readonly JadUpdate.Class.Version Version = new JadUpdate.Class.Version("1.2", JadUpdate.Class.VersionTag.Beta); 
+        public static readonly JadUpdate.Class.Version Version = new JadUpdate.Class.Version("1.3", JadUpdate.Class.VersionTag.Beta); 
         public static string UpdateUrl = "https://raw.githubusercontent.com/Jadquir/uae-files/main/updates.json";
 
         public static string YoutubeLink = "https://www.youtube.com/channel/UCfFGFB1flw00AiHw_4xYvPw?sub_confirmation=1";
