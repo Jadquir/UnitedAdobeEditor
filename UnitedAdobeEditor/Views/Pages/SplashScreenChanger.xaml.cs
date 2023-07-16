@@ -69,7 +69,7 @@ namespace UnitedAdobeEditor.Views.Pages
                 
 
             };
-            if (CurrentOperation.AppType == AdobeType.Photoshop)
+            if (CurrentOperation.AppType == AdobeType.Photoshop || CurrentOperation.AppType == AdobeType.PhotoshopBeta)
             {
                 colorboxes.Children.Clear();
 
@@ -108,7 +108,7 @@ namespace UnitedAdobeEditor.Views.Pages
                 MessageBoxJ.ShowOK($"Adobe Application ({app.FileName}) is running. Please close the application and try again.");
                 return;
             }
-            if (CurrentOperation.AppType == AdobeType.Photoshop)
+            if (CurrentOperation.AppType == AdobeType.Photoshop || CurrentOperation.AppType == AdobeType.PhotoshopBeta)
             {
                 SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.BackgroundColor] = BGColor.ColorData;
                 SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.TextColor] = FGColor.ColorData;

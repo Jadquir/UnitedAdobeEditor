@@ -9,6 +9,7 @@ namespace UnitedAdobeEditor.Components.Enums
     public enum AdobeType
     {
         Photoshop,
+        PhotoshopBeta,
         Illustrator,
         AfterEffects,
         PremierePro,

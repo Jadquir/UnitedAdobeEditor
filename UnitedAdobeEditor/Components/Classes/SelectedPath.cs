@@ -26,7 +26,9 @@ namespace UnitedAdobeEditor.Components.Classes
             try
             {
                 EXEFilePath = path;
-                if (CurrentOperation.AppType == AdobeType.Photoshop)
+                if (CurrentOperation.AppType == AdobeType.Photoshop ||
+                    CurrentOperation.AppType == AdobeType.PhotoshopBeta
+                    )
                 {
                     (bool, string) path1 = GetUIColorsFile.GetPath(AdobeFolder);
                     if (!path1.Item1)

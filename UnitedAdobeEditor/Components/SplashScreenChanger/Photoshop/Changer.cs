@@ -9,8 +9,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnitedAdobeEditor.Components.Classes;
+using UnitedAdobeEditor.Components.Classes.SplashScreenData;
 using UnitedAdobeEditor.Components.Helpers;
 using Wpf.Ui.Dpi;
+using static UnitedAdobeEditor.Components.Classes.SplashScreenData.Main;
 using static UnitedAdobeEditor.Components.SplashScreenChanger.Photoshop.Changer.Files;
 
 namespace UnitedAdobeEditor.Components.SplashScreenChanger.Photoshop
@@ -227,20 +229,29 @@ namespace UnitedAdobeEditor.Components.SplashScreenChanger.Photoshop
             return false;
         }
 
-        private static string GetFileName(string directory)
+        private static List<ResourceImageData> GetData(string directory)
         {
             if (Directory.Exists(directory))
             {
-                string text = "Splash1080Background_s0.png";
-                if (File.Exists(directory + "\\" + text))
+                AdobeApp? app = Get(CurrentOperation.AppType);
+                if (app == null)
                 {
-                    return text;
+                    Misc.SetStatePleaseWait();
+                    return null;
                 }
-                text = "SplashBackground_s0.png";
-                if (File.Exists(directory + "\\" + text))
-                {
-                    return text;
-                }
+                return app.ResourceData.Cast<ResourceImageData>().ToList();
+                //foreach (var item in app.ResourceData)
+                //{
+                //    var data = (ResourceImageData)item;
+                //    if(data == null) continue;
+                //    foreach (var name in data.PossibleNames)
+                //    {
+                //        if (File.Exists(directory + "\\" + name))
+                //        {
+                //            return data;
+                //        }
+                //    }
+                //}
             }
             return null;
         }
@@ -249,18 +260,40 @@ namespace UnitedAdobeEditor.Components.SplashScreenChanger.Photoshop
         {
             try
             {
-                string fileName = GetFileName(ExtractFolder + "\\High\\");
-                File.Delete(ExtractFolder + "\\High\\" + fileName);
-                File.Delete(ExtractFolder + "\\Low\\" + fileName);
+                AdobeApp? app = Get(CurrentOperation.AppType);
+                if (app == null)
+                {
+                    return false;
+                }
+                var resourceData = app.ResourceData;
 
-                var high = image.ResizeImage(new Size(1500, 1000));
-                var low = image.ResizeImage(new Size(750, 500));
 
-                high.Save(ExtractFolder + "\\High\\" + fileName, ImageFormat.Png);
-                low.Save(ExtractFolder + "\\Low\\" + fileName, ImageFormat.Png);
+                foreach (var item in resourceData)
+                {
+                    var data = (ResourceImageData)item;
+                    if (data == null) { continue; }
+                    foreach (var name in data.PossibleNames)
+                    {
+                        var file = Path.Combine(ExtractFolder, data.Parent, name);
+                        if (!File.Exists(file)) continue;
+                        File.Delete(file);
+                        using var resized = image.ResizeImage(data.ImageSize);
+                            resized.Save(file, ImageFormat.Png);
+                        break;
+                    }
+                }
+                //string fileName = "";
+                //File.Delete(ExtractFolder + "\\High\\" + fileName);
+                //File.Delete(ExtractFolder + "\\Low\\" + fileName);
 
-                high.Dispose();
-                low.Dispose();
+                //var high = image.ResizeImage(new Size(1500, 1000));
+                //var low = image.ResizeImage(new Size(750, 500));
+
+                //high.Save(ExtractFolder + "\\High\\" + fileName, ImageFormat.Png);
+                //low.Save(ExtractFolder + "\\Low\\" + fileName, ImageFormat.Png);
+
+                //high.Dispose();
+                //low.Dispose();
                 return true;
             }
             catch (Exception ex)

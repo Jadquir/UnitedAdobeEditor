@@ -34,6 +34,10 @@ namespace UnitedAdobeEditor.Components.Classes
         }
         public string[] GetPaths(AdobeType appType)
         {
+            if(appType == AdobeType.PhotoshopBeta || appType == AdobeType.Photoshop)
+            {
+                return selectedPaths[AdobeType.PhotoshopBeta].Concat(selectedPaths[AdobeType.Photoshop]).ToArray();
+            }
             return selectedPaths[appType];
         }
     }

@@ -34,7 +34,8 @@
                 MinWidth="150"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
-                Click="Button_Click">
+                Click="Button_Click"
+                Icon="Save16">
                 Save
             </ui:Button>
         </StackPanel>

@@ -139,7 +139,8 @@ namespace UnitedAdobeEditor
                     uiPage = new VersionSelector();
                     break;
                 case Page.OperationSelector:
-                    if (CurrentOperation.AppType == AdobeType.Photoshop)
+                    if (CurrentOperation.AppType == AdobeType.Photoshop ||
+                    CurrentOperation.AppType == AdobeType.PhotoshopBeta)
                     {
                         uiPage = new OperationSelector();
                     }

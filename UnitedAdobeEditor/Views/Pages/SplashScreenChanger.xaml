@@ -99,7 +99,8 @@
                     Grid.Column="0"
                     HorizontalAlignment="Right"
                     Click="applyButton_Click"
-                    Cursor="Hand">
+                    Cursor="Hand"
+                    Icon="Save24">
                     Apply
                 </ui:Button>
                 <ui:Button
@@ -108,7 +109,8 @@
                     Margin="20,0,0,0"
                     HorizontalAlignment="Left"
                     Click="restoreButton_Click"
-                    Cursor="Hand">
+                    Cursor="Hand"
+                    Icon="ArrowCounterclockwise12">
                     Return to Original
                 </ui:Button>
             </Grid>

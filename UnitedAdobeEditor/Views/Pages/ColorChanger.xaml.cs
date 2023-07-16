@@ -31,7 +31,7 @@ namespace UnitedAdobeEditor.Views.Pages
 
             MainColor = UIColorsData.Instance.MainColor.Color.ToMediaColor();
             mainColorHolder.Background = new SolidColorBrush(MainColor);
-
+            mainColorHolder.EnableChangeBgColor = false;
             advancedActiveCheckBox.IsChecked = UIColorsData.Instance.IsAdvancedActivated;
             CheckBox_Checked(this, null);
 

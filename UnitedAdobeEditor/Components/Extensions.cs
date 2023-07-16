@@ -25,6 +25,9 @@ namespace UnitedAdobeEditor.Components
                 case AdobeType.AfterEffects:
                     value = "After Effects";
                     break;
+                case AdobeType.PhotoshopBeta:
+                    value = "Photoshop Beta";
+                    break;
                 case AdobeType.PremierePro:
                     value = "Premiere Pro";
                     break;

@@ -25,6 +25,7 @@
     <None Remove="Images\Logos\lightroomclassic.png" />
     <None Remove="Images\Logos\mediaencoder.png" />
     <None Remove="Images\Logos\photoshop.png" />
+    <None Remove="Images\Logos\photoshop_beta.png" />
     <None Remove="Images\Logos\premiere_pro.png" />
     <None Remove="Images\SplashScreenImport.png" />
   </ItemGroup>
@@ -88,6 +89,10 @@
     <Resource Include="Images\SplashScreenImport.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Logos\photoshop_beta.png" />
   </ItemGroup>
 
   <ItemGroup>

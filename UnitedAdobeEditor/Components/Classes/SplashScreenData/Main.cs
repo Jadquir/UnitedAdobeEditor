@@ -38,7 +38,19 @@ namespace UnitedAdobeEditor.Components.Classes.SplashScreenData
         }
         private static readonly List<AdobeApp> AdobeAppList = new List<AdobeApp>()
         {
-            new AdobeApp(AdobeType.Photoshop,"Photoshop.exe",ChangerType.Photoshop,null,"photoshop.png",null),
+            new AdobeApp(AdobeType.Photoshop,"Photoshop.exe",ChangerType.Photoshop,new List<ImageDataBase>()
+            {
+                new ResourceImageData("SplashBackground_s0.png","High",new System.Drawing.Size(1500,1000),"Splash1080Background_s0.png"),
+                new ResourceImageData("SplashBackground_s0.png","Low",new System.Drawing.Size(750,500),"Splash1080Background_s0.png"),
+
+            },"photoshop.png",null),
+
+            new AdobeApp(AdobeType.PhotoshopBeta,"Photoshop.exe",ChangerType.Photoshop,new List<ImageDataBase>()
+            {
+                new ResourceImageData("SplashAlt_s0.png","High",new System.Drawing.Size(1500,1000)),
+                new ResourceImageData("SplashAlt_s0.png","Low",new System.Drawing.Size(750,500)),
+
+            },"photoshop_beta.png",null),
 
             new AdobeApp(AdobeType.Illustrator,"Illustrator.exe",ChangerType.Normal,new List<ImageDataBase>()
                 {
