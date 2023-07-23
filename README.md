@@ -39,7 +39,8 @@ You can download it from Itch.io: https://jadquir.itch.io/united-adobe-editor
 
 # Donate
 If you liked my work and want to support me you can buy me a coffee: https://www.buymeacoffee.com/Jadquir
-<a href="https://www.buymeacoffee.com/Jadquir"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a Coffee&emoji=☕&slug=Jadquir&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" /></a>
+
+<a href="https://www.buymeacoffee.com/Jadquir"><img style="width: 200px" src="https://img.buymeacoffee.com/button-api/?text=Buy me a Coffee&emoji=☕&slug=Jadquir&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" /></a>
 
 # Other
 You can check my other work MRA, Music Recognition application for PC. So it is Shazam Client for PC: https://jadquir.xyz/mra/
