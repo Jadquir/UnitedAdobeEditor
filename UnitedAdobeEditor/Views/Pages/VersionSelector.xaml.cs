@@ -37,14 +37,14 @@ namespace UnitedAdobeEditor.Views.Pages
             string[] oldPaths = Settings.Instance.SelectedPaths.GetPaths(CurrentOperation.AppType);
 
             list1.Items.Clear();
-            foreach (var item in oldPaths)
+            for (int i = 0; i < oldPaths.Length; i++)
             {
-                var path = new SelectedPath(item,false);
+                var item = oldPaths[i];
+                var path = new SelectedPath(item, false);
                 if (!path.SuccessInit) { continue; }
                 var version = new VersionCard(path);
                 list1.Items.Add(version);
             }
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

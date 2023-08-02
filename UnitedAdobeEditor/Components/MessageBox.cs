@@ -62,6 +62,10 @@ namespace UnitedAdobeEditor.Components
         {
             _ = ShowDialog(message);
         }
+        public static async Task ShowOKAsync(string message)
+        {
+            await ShowDialog(message);
+        }
         public static async Task ShowDialog(string message,
 
             string RightButtonText = "OK",

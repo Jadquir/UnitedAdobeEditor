@@ -21,18 +21,24 @@ namespace UnitedAdobeEditor.Views.CustomControls
     /// </summary>
     public partial class VersionCard : ExtendedUserControl
     {
+        private readonly SelectedPath selectedPath;
         public VersionCard(SelectedPath path)
         {
             InitializeComponent();
 
             this.title.Text = path.Title;
             this.path.Text = path.EXEFilePath;
+            this.selectedPath = path;
 
             OnClick += (o, e) =>
             {
-                CurrentOperation.SelectedPath = path;
-                MainWindow.Instance.Navigate(Components.Enums.Page.OperationSelector);
+                Click();
             };
+        }
+        public void Click()
+        {
+            CurrentOperation.SelectedPath = selectedPath;
+            MainWindow.Instance.Navigate(Components.Enums.Page.OperationSelector);
         }
     }
 }

@@ -17,14 +17,34 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock
+        <StackPanel
             Grid.Row="0"
-            Margin="0,15,0,15"
-            VerticalAlignment="Top"
-            FontSize="15"
-            TextAlignment="Center">
-            Please select the Adobe application you want to make changes on.
-        </TextBlock>
+            Margin="0,15,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top">
+            <TextBlock FontSize="15" TextAlignment="Center">
+                Please select the Adobe application you want to make changes on.
+            </TextBlock>
+            <StackPanel
+                Margin="0,15,0,15"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <ui:Button
+                    Margin="0,0,10,0"
+                    Click="openCreateLink"
+                    Cursor="Hand"
+                    Icon="Add24">
+                    Create Splash Screen
+                </ui:Button>
+                <ui:Button
+                    Click="LoadConfig"
+                    Cursor="Hand"
+                    Icon="Folder28">
+                    Load UAE Config
+                </ui:Button>
+            </StackPanel>
+        </StackPanel>
+
         <ui:VirtualizingItemsControl
             x:Name="list1"
             Grid.Row="1"

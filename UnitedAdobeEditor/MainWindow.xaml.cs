@@ -47,6 +47,7 @@ namespace UnitedAdobeEditor
     {
         public static MainWindow Instance;
 
+        public  string CreateSplashScreenLink => App.CreateSplashScreenLink;
         public MainWindow()
         {
             AdminRelaunch.AdminRelauncher();
@@ -77,6 +78,11 @@ namespace UnitedAdobeEditor
             {
                 Navigate(Page.MainMenu);
                 CheckUpdates();
+
+                if (!string.IsNullOrEmpty(App.loadedFile))
+                {
+                    _ = MainMenu.LoadFile(App.loadedFile);
+                }
             };
 
 
@@ -139,8 +145,8 @@ namespace UnitedAdobeEditor
                     uiPage = new VersionSelector();
                     break;
                 case Page.OperationSelector:
-                    if (CurrentOperation.AppType == AdobeType.Photoshop ||
-                    CurrentOperation.AppType == AdobeType.PhotoshopBeta)
+                    if ((CurrentOperation.AppType == AdobeType.Photoshop || CurrentOperation.AppType == AdobeType.PhotoshopBeta)
+                        && !CurrentOperation.IsConfigActivated)
                     {
                         uiPage = new OperationSelector();
                     }
@@ -186,6 +192,7 @@ namespace UnitedAdobeEditor
         }
         public void GoBack()
         {
+            CurrentOperation.IsConfigActivated = false;
             MainWindow.GoBackDisabled = false;
             if (RootNav.NavigationService.CanGoBack)
             {
