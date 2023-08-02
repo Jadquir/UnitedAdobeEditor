@@ -82,6 +82,21 @@ namespace UnitedAdobeEditor.Views.Pages
                 colorboxes.Visibility = Visibility.Visible;
             }
             SaveData.Load();
+
+
+            if (CurrentOperation.IsConfigActivated && CurrentOperation.Operation != null)
+            {
+                if(CurrentOperation.Operation.SplashScreen is null)
+                {
+                    MessageBoxJ.ShowOK("Something went wrong while loading config image!");
+                }
+                else
+                {
+                    this.image.Source = Misc.ConvertDrawingImageToBitmapImage(CurrentOperation.Operation.SplashScreen);
+                    SelectedImage = CurrentOperation.Operation.SplashScreen;
+
+                }
+            }
         }
         private AdvancedColorBox BGColor;
         private AdvancedColorBox FGColor;
@@ -133,6 +148,7 @@ namespace UnitedAdobeEditor.Views.Pages
                 default:
                     break;
             }
+            CurrentOperation.IsConfigActivated = false;
         }
         
         private async void restoreButton_Click(object sender1, RoutedEventArgs e)

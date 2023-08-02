@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -60,6 +62,45 @@ namespace UnitedAdobeEditor.Components
         {
             LoadingStateController.SetState(LoadingStateController.State.PleaseWait, "misc");
         }
+        public static void AssociateFile(string extension, string progId, string appName, string appPath)
+        {
+            // Create a new registry key for the file extension.
+            using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(extension))
+            {
+                key.SetValue("", progId);
+            }
+
+            // Create a new registry key for the application.
+            using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(progId))
+            {
+                key.SetValue("", appName);
+                key.CreateSubKey("DefaultIcon").SetValue("", "\"" + appPath + "\",0");
+                key.CreateSubKey(@"Shell\Open\Command").SetValue("", "\"" + appPath + "\" \"%1\"");
+            }
+        }
+        public static Image? ImageFromBase64String(string base64String)
+        {
+            try
+            {
+                // Remove the "data:image/png;base64," part from the base64 string
+                base64String = base64String.Replace("data:image/png;base64,", "");
+
+                // Convert the base64 string to a byte array
+                byte[] imageBytes = Convert.FromBase64String(base64String);
+
+                // Create a MemoryStream from the byte array
+                using (MemoryStream memoryStream = new MemoryStream(imageBytes))
+                {
+                    // Create the image from the MemoryStream
+                    return Image.FromStream(memoryStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return null;
+            }
+        }
         private static string GetOnlyFolder(string path)
         {
             if (IsDirectory(path)) { return path; }
@@ -103,6 +144,24 @@ namespace UnitedAdobeEditor.Components
             bitmap.Freeze();
             LoadedImages[filepath] = bitmap;
             return bitmap;
+        }
+        public static BitmapImage ConvertDrawingImageToBitmapImage(System.Drawing.Image drawingImage)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Save the System.Drawing.Image to the MemoryStream in the desired format
+                drawingImage.Save(memoryStream, ImageFormat.Png); // You can change the format if needed (e.g., JPEG, BMP, etc.)
+
+                // Create a new BitmapImage
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = memoryStream;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze(); // Freeze the BitmapImage to make it read-only and thread-safe
+
+                return bitmapImage;
+            }
         }
         public static BitmapImage ImageFromResource(string relativePath)
         {
