@@ -47,7 +47,7 @@ namespace UnitedAdobeEditor
     {
         public static MainWindow Instance;
 
-        public  string CreateSplashScreenLink => App.CreateSplashScreenLink;
+        public  string CreateSplashScreenLink = App.CreateSplashScreenLink;
         public MainWindow()
         {
             AdminRelaunch.AdminRelauncher();
@@ -168,6 +168,9 @@ namespace UnitedAdobeEditor
                 case Page.AdvancedColors:
                     uiPage = new AdvancedColors();
                     break;
+                case Page.CreateConfig:
+                    uiPage = new CreateConfig();
+                    break;
                 case Page.Loading:
                     uiPage = new Loading();
                     break;
@@ -197,6 +200,21 @@ namespace UnitedAdobeEditor
             if (RootNav.NavigationService.CanGoBack)
             {
                 RootNav.NavigationService.GoBack();
+            }
+        }
+        public void ChangeVisibility(bool isVisible)
+        {
+            WindowState = isVisible ? WindowState.Normal : WindowState.Minimized;
+            Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+            if(isVisible)
+            {
+                Show();
+                Topmost = true;
+                Topmost = false;
+            }
+            else
+            {
+                Hide();
             }
         }
         public void UpdateText()

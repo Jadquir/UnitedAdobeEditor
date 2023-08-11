@@ -37,6 +37,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PShop.CC.IconResources" Version="1.0.0" />
+    <PackageReference Include="SingleInstanceCore" Version="2.2.2" />
     <PackageReference Include="Vestris.ResourceLib" Version="2.1.0" />
     <PackageReference Include="WPF-UI" Version="2.0.3" />
   </ItemGroup>

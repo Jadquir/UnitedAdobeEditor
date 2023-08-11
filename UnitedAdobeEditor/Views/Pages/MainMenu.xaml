@@ -37,6 +37,13 @@
                     Create Splash Screen
                 </ui:Button>
                 <ui:Button
+                    Margin="0,0,10,0"
+                    Click="Button_Click"
+                    Cursor="Hand"
+                    Icon="Folder28">
+                    Create UAE Config
+                </ui:Button>
+                <ui:Button
                     Click="LoadConfig"
                     Cursor="Hand"
                     Icon="Folder28">

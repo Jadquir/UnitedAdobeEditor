@@ -14,6 +14,9 @@ namespace UnitedAdobeEditor.Components.Classes
         public string app_type;
         public string image_base64;
         public string image;
+        public bool is_silent;
+        public bool closeAfterChanging;
+        public string selected_folder;
 
         public Operation? ToOperation(out string error)
         {
@@ -37,26 +40,30 @@ namespace UnitedAdobeEditor.Components.Classes
                 SplashScreen = SplashScreen
             };
         }
-
+        public static readonly Dictionary<string, AdobeType> appTypes = new Dictionary<string, AdobeType>()
+        {
+            { "ps" , AdobeType.Photoshop },
+            { "ps_beta" , AdobeType.PhotoshopBeta },
+            { "pr" ,AdobeType.PremierePro },
+            { "ae" ,AdobeType.AfterEffects },
+            { "ai" ,AdobeType.Illustrator },
+            { "me" ,AdobeType.MediaEncoder },
+            { "an" ,AdobeType.Animate },
+            { "au" ,AdobeType.Audition },
+            { "lr" ,AdobeType.Lightroom },
+            { "lrc", AdobeType.LightroomClassic },
+            { "id" ,AdobeType.InDesign },
+            { "dw" ,AdobeType.Dreamweaver },
+            { "ic" ,AdobeType.InCopy },
+            { "ch" ,AdobeType.CharacterAnimator } 
+        };
         private AdobeType? GetAppType()
         {
-            return app_type switch
+            if (appTypes.TryGetValue(app_type,out var adobeType))
             {
-                "ps" => AdobeType.Photoshop,
-                "pr" => AdobeType.PremierePro,
-                "ae" => AdobeType.AfterEffects,
-                "ai" => AdobeType.Illustrator,
-                "me" => AdobeType.MediaEncoder,
-                "an" => AdobeType.Animate,
-                "au" => AdobeType.Audition,
-                "lr" => AdobeType.Lightroom,
-                "lrc" => AdobeType.LightroomClassic,
-                "id" => AdobeType.InDesign,
-                "dw" => AdobeType.Dreamweaver,
-                "ic" => AdobeType.InCopy,
-                "ch" => AdobeType.CharacterAnimator,
-                _ => null
-            };
+                return adobeType;
+            }
+            return null;
         }
     }
 }

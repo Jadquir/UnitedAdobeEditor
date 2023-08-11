@@ -101,6 +101,22 @@ namespace UnitedAdobeEditor.Components
                 return null;
             }
         }
+        public static string ImageToBase64(Image image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                // Save the image to the memory stream in a format like JPEG or PNG
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+                // Convert the memory stream to a byte array
+                byte[] imageBytes = ms.ToArray();
+
+                // Convert the byte array to a base64 string
+                string base64String = Convert.ToBase64String(imageBytes);
+
+                return base64String;
+            }
+        }
         private static string GetOnlyFolder(string path)
         {
             if (IsDirectory(path)) { return path; }

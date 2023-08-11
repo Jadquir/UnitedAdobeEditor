@@ -9,7 +9,7 @@
         ColorChanger,
         SplashScreenChanger,
         AdvancedColors,
-        Loading,
+        Loading, CreateConfig,
         About
     }
 }

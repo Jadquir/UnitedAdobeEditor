@@ -49,6 +49,11 @@ namespace UnitedAdobeEditor.Views.CustomControls
                 colorSelect.Background = new SolidColorBrush(color.Item2);
             };
 
+            numberBox.SelectionChanged += (s, e) =>
+            {
+                ColorData.Opacity = (float)numberBox.Value;
+            };
+
         }
     }
 }

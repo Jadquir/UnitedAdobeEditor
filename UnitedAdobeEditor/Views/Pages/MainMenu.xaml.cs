@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using UnitedAdobeEditor.Components;
 using UnitedAdobeEditor.Components.Classes;
 using UnitedAdobeEditor.Components.Enums;
+using UnitedAdobeEditor.Components.Helpers;
 using UnitedAdobeEditor.Views.CustomControls;
 using Wpf.Ui.Controls;
 
@@ -70,11 +71,53 @@ namespace UnitedAdobeEditor.Views.Pages
                     await MessageBoxJ.ShowOKAsync(error);
                     return;
                 }
+                void Failed()
+                {
+                    CurrentOperation.IsConfigActivated = false;
+                    CurrentOperation.Operation = null;
+                    CurrentOperation.SelectedPath = null;
+                    CurrentOperation.operationType = OperationType.SplashScreen;
+                    CurrentOperation.AppType = AdobeType.Photoshop;
+
+                }
                 CurrentOperation.IsConfigActivated = true;
                 CurrentOperation.Operation = operation;
                 CurrentOperation.operationType = operation.operationType;
                 CurrentOperation.AppType = operation.AppType;
-                MainWindow.Instance.Navigate(Components.Enums.Page.VersionSelector);
+                CurrentOperation.SelectedPath = null;
+
+                if (config.is_silent)
+                {
+                    MainWindow.Instance.ChangeVisibility(false);
+                }
+                if(!string.IsNullOrWhiteSpace( config.selected_folder))
+                {
+                    SelectedPath selectedPath = PathSelector.Select(operation.AppType);
+                    if (selectedPath == null || !selectedPath.SuccessInit)
+                    {
+                        MainWindow.Instance.ChangeVisibility(true);
+                        Failed();
+                        return;
+                    }
+                    CurrentOperation.SelectedPath = selectedPath;
+                }
+                if (CurrentOperation.SelectedPath != null)
+                {
+                    var isSuccess = SplashScreenChanger.Change(CurrentOperation.AppType, CurrentOperation.Operation.SplashScreen);
+                    if (isSuccess && config.closeAfterChanging)
+                    {
+                        Application.Current.Shutdown();
+                    }
+                    else
+                    {
+                        MainWindow.Instance.ChangeVisibility(true);
+                    }
+                }
+                else
+                {
+                    MainWindow.Instance.ChangeVisibility(true);
+                    MainWindow.Instance.Navigate(Components.Enums.Page.VersionSelector);
+                }
 
             }
             catch (Exception ex)
@@ -84,9 +127,16 @@ namespace UnitedAdobeEditor.Views.Pages
             }
 
         }
+        
         private void openCreateLink(object sender, RoutedEventArgs e)
         {
             Misc.OpenUrl(App.CreateSplashScreenLink);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            MainWindow.Instance.Navigate(Components.Enums.Page.CreateConfig);
         }
     }
 }

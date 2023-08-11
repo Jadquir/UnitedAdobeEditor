@@ -21,7 +21,7 @@
 
     <Grid>
         <StackPanel>
-            <local1:ExtendedBorder
+            <!--<local1:ExtendedBorder
                 x:Name="imageHolder"
                 Height="300"
                 Margin="15"
@@ -138,7 +138,8 @@
                     Padding="12,7"
                     Content="Don't you have a custom splash screen? Create one easily."
                     NavigateUri="{Binding Instance.CreateSplashScreenLink, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UnitedAdobeEditor:MainWindow}}}" />
-            </local1:ExtendedBorder>
+            </local1:ExtendedBorder>-->
+            <local1:ImageSelector x:Name="imageSelector" />
             <StackPanel
                 x:Name="colorboxes"
                 Margin="0,15,0,0"
