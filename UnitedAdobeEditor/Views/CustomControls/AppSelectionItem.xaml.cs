@@ -33,7 +33,7 @@ namespace UnitedAdobeEditor.Views.CustomControls
             AppType = item.Value;
 
             var app = UnitedAdobeEditor.Components.Classes.SplashScreenData.Main.Get(AppType);
-            if(app != null)
+            if (app != null)
             {
                 string name = app.LogoName;
 
@@ -43,9 +43,19 @@ namespace UnitedAdobeEditor.Views.CustomControls
                     icon.Source = Misc.ImageFromResource(file);
                 }
             }
+            icon.Visibility = (Key == "none").VisibleIfFalse();
             appName.Text = item.Value.ToFriendlyString();
 
 
+            return this;
+        }
+        public AppSelectionItem Set(string key, string text)
+        {
+            Key = key;
+            AppType = Components.Enums.AdobeType.Photoshop;
+
+            icon.Visibility = (Key == "none").VisibleIfFalse();
+            appName.Text = text;
             return this;
         }
     }

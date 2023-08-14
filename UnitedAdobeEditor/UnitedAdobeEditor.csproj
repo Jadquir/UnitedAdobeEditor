@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\logo.png" />
     <None Remove="Images\Logos\after_effects.png" />
     <None Remove="Images\Logos\animate.png" />
     <None Remove="Images\Logos\audition.png" />
@@ -35,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FirebaseAuthentication.net" Version="4.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PShop.CC.IconResources" Version="1.0.0" />
     <PackageReference Include="SingleInstanceCore" Version="2.2.2" />
@@ -48,6 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\logo.png" />
     <Resource Include="Images\Logos\after_effects.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

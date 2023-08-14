@@ -73,22 +73,40 @@
             </local1:ExtendedBorder.Triggers>
             <Image x:Name="image" Source="pack://application:,,,/Images/SplashScreenImport.png" />
         </local1:ExtendedBorder>
-        <local1:ExtendedBorder
-            HorizontalAlignment="Center"
-            Background="{StaticResource threBrush}"
-            CornerRadius="5"
-            Cursor="Hand"
-            EnableChangeBgColor="True">
-            <!--<local1:ExtendedBorder.Effect>
+        <StackPanel>
+            <local1:ExtendedBorder
+                HorizontalAlignment="Center"
+                Background="{StaticResource threBrush}"
+                CornerRadius="5"
+                Cursor="Hand"
+                EnableChangeBgColor="True">
+                <!--<local1:ExtendedBorder.Effect>
                 <DropShadowEffect
                     BlurRadius="13"
                     ShadowDepth="0"
                     Color="{StaticResource shadowColor}" />
             </local1:ExtendedBorder.Effect>-->
-            <ui:Hyperlink
-                Padding="12,7"
-                Content="Don't you have a custom splash screen? Create one easily."
-                NavigateUri="{Binding CreateSplashScreenLink, ElementName=control}" />
-        </local1:ExtendedBorder>
+                <ui:Hyperlink
+                    x:Name="hyperlink"
+                    Padding="12,7"
+                    HorizontalAlignment="Center"
+                    Content="Don't you have a custom splash screen? Create one easily."
+                    NavigateUri="{Binding CreateSplashScreenLink, ElementName=control}" />
+            </local1:ExtendedBorder>
+            <ui:Button
+                x:Name="button"
+                Margin="0,5,0,0"
+                HorizontalAlignment="Center"
+                Background="Transparent"
+                BorderBrush="#00000000"
+                Click="button_Click"
+                Cursor="Hand"
+                Foreground="{Binding Foreground, ElementName=hyperlink}"
+                Icon="Search48"
+                IconFilled="True"
+                IconForeground="{Binding Foreground, ElementName=button}">
+                Explore Other Users' Splash Screens
+            </ui:Button>
+        </StackPanel>
     </StackPanel>
 </UserControl>

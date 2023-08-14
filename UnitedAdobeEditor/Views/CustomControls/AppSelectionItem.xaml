@@ -5,15 +5,21 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:UnitedAdobeEditor.Views.CustomControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    HorizontalAlignment="Stretch"
     mc:Ignorable="d">
     <Border>
         <StackPanel Orientation="Horizontal">
             <Image
                 x:Name="icon"
-                Width="25"
-                Height="25"
-                Margin="0,0,10,0" />
-            <TextBlock x:Name="appName" VerticalAlignment="Center">Photoshop</TextBlock>
+                Width="20"
+                Height="20"
+                Margin="5,3,10,3" />
+            <TextBlock
+                x:Name="appName"
+                Margin="0,0,10,0"
+                VerticalAlignment="Center">
+                Photoshop
+            </TextBlock>
         </StackPanel>
 
     </Border>

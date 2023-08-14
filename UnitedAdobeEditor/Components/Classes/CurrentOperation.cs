@@ -10,6 +10,9 @@ namespace UnitedAdobeEditor.Components.Classes
 {
     public class CurrentOperation
     {
+        internal static bool isRunStat;
+        internal static string runStatId;
+
         public static AdobeType AppType { get; set; }
         public static SelectedPath SelectedPath { get; set; }
 

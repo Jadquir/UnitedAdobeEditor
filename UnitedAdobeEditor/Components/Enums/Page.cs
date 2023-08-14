@@ -10,6 +10,8 @@
         SplashScreenChanger,
         AdvancedColors,
         Loading, CreateConfig,
-        About
+        About,
+        ShareConfigPage,
+        ExploreConfigs
     }
 }

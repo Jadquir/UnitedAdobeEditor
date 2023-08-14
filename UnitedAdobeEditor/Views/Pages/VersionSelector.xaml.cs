@@ -31,6 +31,7 @@ namespace UnitedAdobeEditor.Views.Pages
         {
             InitializeComponent();
             UpdateVersions();
+            appLogo.Set(new KeyValuePair<string, AdobeType>("", CurrentOperation.AppType));
         }
         private void UpdateVersions()
         {

@@ -17,6 +17,7 @@ using UnitedAdobeEditor.Components.Helpers;
 using System.IO;
 using static UnitedAdobeEditor.Components.Classes.SplashScreenData.Main;
 using System.Security.AccessControl;
+using UnitedAdobeEditor.Components.Firebase;
 
 namespace UnitedAdobeEditor.Views.Pages
 {
@@ -32,12 +33,12 @@ namespace UnitedAdobeEditor.Views.Pages
             {
                 colorboxes.Children.Clear();
 
-                static AdvancedColorBox Create(Components.ColorChanger.ColorHolder colorHolder)
+                static AdvancedColorBox Create(SaveData.SplashScreenColor ssc)
                 {
-                    return new AdvancedColorBox(colorHolder);
+                    return new AdvancedColorBox(SaveData.Instance.SplashScreenColors[ssc]);
                 }
-                colorboxes.Children.Add(BGColor = Create(SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.BackgroundColor]));
-                colorboxes.Children.Add(FGColor = Create(SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.TextColor]));
+                colorboxes.Children.Add(BGColor = Create(SaveData.SplashScreenColor.BackgroundColor));
+                colorboxes.Children.Add(FGColor = Create(SaveData.SplashScreenColor.TextColor));
                 colorboxes.Visibility = Visibility.Visible;
             }
             SaveData.Load();
@@ -57,7 +58,7 @@ namespace UnitedAdobeEditor.Views.Pages
         }
         private AdvancedColorBox BGColor;
         private AdvancedColorBox FGColor;
-        public static bool Change(AdobeType AppType, Image? image)
+        public static  bool Change(AdobeType AppType, Image? image)
         {
             if (image == null)
             {
@@ -93,6 +94,12 @@ namespace UnitedAdobeEditor.Views.Pages
                 default:
                     break;
             }
+            if (CurrentOperation.isRunStat && !string.IsNullOrEmpty(CurrentOperation.runStatId))
+            {
+                _ = PublicConfigManager.UpdateStat(CurrentOperation.runStatId, PublicConfigManager.StatType.run_config);
+            }
+            CurrentOperation.isRunStat = false;
+            CurrentOperation.runStatId = "";
             CurrentOperation.IsConfigActivated = false;
             return true;
         }

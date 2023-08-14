@@ -34,8 +34,19 @@ namespace UnitedAdobeEditor.Views.CustomControls
         public static string CreateSplashScreenLink => App.CreateSplashScreenLink;
         public void SetSelectedImage(System.Drawing.Image image)
         {
-            this.image.Source = Misc.ConvertDrawingImageToBitmapImage(image);
-            SelectedImage = CurrentOperation.Operation.SplashScreen;
+            Dispatcher.Invoke(() =>
+            {
+                SelectedImage = image;
+                try
+                {
+
+                    this.image.Source = Misc.ConvertDrawingImageToBitmapImage(SelectedImage);
+                }
+                catch (Exception)
+                {
+
+                }
+            });
         }
         private async void OnClick(object? sender, EventArgs e)
         {
@@ -67,6 +78,11 @@ namespace UnitedAdobeEditor.Views.CustomControls
                 SelectedImage = (System.Drawing.Image)image.Clone();
                 image.Dispose();
             }
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.Navigate(Components.Enums.Page.ExploreConfigs);
         }
     }
 }

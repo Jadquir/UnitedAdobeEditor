@@ -26,8 +26,11 @@ using UnitedAdobeEditor.Components;
 using UnitedAdobeEditor.Components.Classes;
 using UnitedAdobeEditor.Components.ColorChanger;
 using UnitedAdobeEditor.Components.Enums;
+using UnitedAdobeEditor.Components.Firebase;
 using UnitedAdobeEditor.Components.Helpers;
 using UnitedAdobeEditor.Components.Scripts;
+using UnitedAdobeEditor.Views;
+using UnitedAdobeEditor.Views.CustomControls;
 using UnitedAdobeEditor.Views.Pages;
 using Wpf.Ui.Animations;
 using Wpf.Ui.Appearance;
@@ -83,6 +86,10 @@ namespace UnitedAdobeEditor
                 {
                     _ = MainMenu.LoadFile(App.loadedFile);
                 }
+                if (!string.IsNullOrEmpty(App.ConfigId) && App.NavigateToConfig)
+                {
+                    _ = UseConfig();
+                }
             };
 
 
@@ -100,10 +107,7 @@ namespace UnitedAdobeEditor
 
         private void MainWindow_ContentRendered(object? sender, EventArgs e)
         {
-            var bgType = Wpf.Ui.Appearance.Background.IsSupported(BackgroundType.Mica) ?
-                BackgroundType.Mica : BackgroundType.None;
-
-            Wpf.Ui.Appearance.Background.Apply(this, bgType);
+            Wpf.Ui.Appearance.Background.Apply(this, GetBackgroundType());
             Wpf.Ui.Appearance.Accent.ApplySystemAccent();
         }
 
@@ -140,9 +144,15 @@ namespace UnitedAdobeEditor
                     uiPage = new MainMenu();
                     break;
                 case Page.Settings:
-                    break; 
+                    break;
                 case Page.VersionSelector:
                     uiPage = new VersionSelector();
+                    break;
+                case Page.ExploreConfigs:
+                    uiPage = new ExploreConfigsPage();
+                    break;
+                case Page.ShareConfigPage:
+                    uiPage = new ShareConfigPage();
                     break;
                 case Page.OperationSelector:
                     if ((CurrentOperation.AppType == AdobeType.Photoshop || CurrentOperation.AppType == AdobeType.PhotoshopBeta)
@@ -196,6 +206,7 @@ namespace UnitedAdobeEditor
         public void GoBack()
         {
             CurrentOperation.IsConfigActivated = false;
+            CurrentOperation.isRunStat = false;
             MainWindow.GoBackDisabled = false;
             if (RootNav.NavigationService.CanGoBack)
             {
@@ -204,7 +215,7 @@ namespace UnitedAdobeEditor
         }
         public void ChangeVisibility(bool isVisible)
         {
-            WindowState = isVisible ? WindowState.Normal : WindowState.Minimized;
+            WindowState = isVisible ? (WindowState == WindowState.Maximized ? WindowState.Maximized : WindowState.Normal) : WindowState.Minimized;
             Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
             if(isVisible)
             {
@@ -249,7 +260,12 @@ namespace UnitedAdobeEditor
             if (e.NavigationMode == NavigationMode.Back && RootNav.Content is Loading)
             {
                 e.Cancel = true;
-            }       
+            }
+            if (e.NavigationMode == NavigationMode.Back )
+            {
+                CurrentOperation.isRunStat = false;
+                CurrentOperation.IsConfigActivated = false;
+            }
         }
         private void settingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -280,6 +296,111 @@ namespace UnitedAdobeEditor
                     updateAvaButton.Visibility = Visibility.Collapsed;
                 }
             }));
+        }
+
+        internal static BackgroundType GetBackgroundType()
+        {
+            return Wpf.Ui.Appearance.Background.IsSupported(BackgroundType.Mica) ?
+                BackgroundType.Mica : BackgroundType.None;
+        }
+
+        internal void NavigateBack()
+        {
+            if (RootNav.NavigationService.CanGoBack)
+            {
+                RootNav.NavigationService.GoBack();
+            }
+        }
+        public void SetLoadingTexts(string? upperText = "", string? lowerText = "")
+        {
+            loadingText.Text = upperText ?? "";
+            loadingText1.Text = lowerText ?? "";
+
+            loadingText.Visibility = string.IsNullOrWhiteSpace(upperText).VisibleIfFalse();
+            loadingText1.Visibility = string.IsNullOrWhiteSpace(lowerText).VisibleIfFalse();
+        }
+        public void SetLoading(string text = "", bool fade = true)
+        {
+            SetLoadingTexts(text);
+            SetLoadingState(true, fade);
+        }
+        public void SetLoadingState(bool isLoading, bool fade = true)
+        {
+            if (!MainWindow.Instance.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    SetLoadingState(isLoading, fade);
+                }));
+                return;
+            }
+
+            if (isLoading)
+            {
+                if (fade)
+                {
+                    if (LoadingPanel.Visibility == Visibility.Collapsed)
+                        LoadingPanel.FadeIn(150);
+                }
+                else
+                {
+                    LoadingPanel.Visibility = Visibility.Visible;
+                }
+                grid.Effect = new System.Windows.Media.Effects.BlurEffect()
+                {
+                    Radius = 25,
+                    KernelType = System.Windows.Media.Effects.KernelType.Gaussian,
+                };
+            }
+            else
+            {
+                if (fade)
+                {
+                    if (LoadingPanel.Visibility == Visibility.Visible)
+                        LoadingPanel.FadeOut(150);
+                }
+                else
+                {
+                    LoadingPanel.Visibility = Visibility.Collapsed;
+                }
+                grid.Effect = null;
+            }
+        }
+
+        internal async Task UseConfig()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(App.ConfigId) || !App.NavigateToConfig)
+                {
+                    return;
+                }
+                var config = await PublicConfigManager.GetConfig(App.ConfigId);
+                if (config == null)
+                    return;
+
+               
+                var item = new AppSelectionItem().Set(new KeyValuePair<string, AdobeType>(config.AppType, Config.appTypes[config.AppType]));
+                var image = await config.GetResizedImage();
+                bool continueChanging = false;
+                await MessageBoxJ.ShowDialogFunc(
+                    new ShareConfirmationControl()
+                    { Margin = new Thickness(0, 10, 0, 0) }
+                    .Set("Are you sure you want to use this config?", image, item)
+                    , "Yes", () => { continueChanging = true; return true; },
+                    "No", () => { continueChanging = false; return true; }, heightMultiplier: 5f,LeftPrimary:true
+                    );
+
+                if(continueChanging)
+                {
+                    await PublicConfigItem.RunConfig(config);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+          
         }
     }
 }

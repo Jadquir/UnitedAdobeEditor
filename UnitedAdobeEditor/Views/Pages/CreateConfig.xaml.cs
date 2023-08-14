@@ -38,11 +38,19 @@ namespace UnitedAdobeEditor.Views.Pages
             apps.SelectedIndex = 0;
             apps.SelectionChanged += Apps_SelectionChanged;
             enableSelectedPath.Checked += EnableSelectedPath_Checked;
+            enableSelectedPath.Unchecked += EnableSelectedPath_Checked;
         }
 
         private void EnableSelectedPath_Checked(object sender, RoutedEventArgs e)
         {
-            selectedPathText.Visibility = enableSelectedPath.IsChecked.GetValueOrDefault(false) ? Visibility.Visible : Visibility.Collapsed;
+            bool isChecked = enableSelectedPath.IsChecked.GetValueOrDefault(false);
+            selectedPathText.Visibility = isChecked
+                ? Visibility.Visible : Visibility.Collapsed;
+            if (!isChecked)
+            {
+                selectedPath = null;
+            }
+            UpdateSelectedPathText();
         }
 
         private void Apps_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -54,7 +62,7 @@ namespace UnitedAdobeEditor.Views.Pages
         private void UpdateSelectedPathText()
         {
             selectedPathText.Text = $"Selected Path: {selectedPath?.EXEFilePath ?? ""}";
-            selectedPathText.Visibility = selectedPath != null ? Visibility.Visible : Visibility.Collapsed;
+            selectedPathText.Visibility = !string.IsNullOrEmpty(selectedPath?.EXEFilePath) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private SelectedPath? selectedPath;
@@ -73,24 +81,33 @@ namespace UnitedAdobeEditor.Views.Pages
                 MessageBoxJ.ShowOK("Please select an Image!");
                 return;
             }
+            if (enableSelectedPath.IsChecked.GetValueOrDefault(false))
+            {
+
+                MessageBoxJ.ShowOK("Please select a path or disable \"Run with Selected Path\"!");
+                return;
+            }
             config.app_type = selectedAppType.Key;
             config.image_base64 = Misc.ImageToBase64(imageSelector.SelectedImage);
             config.is_silent = runSilentCheckBox.IsChecked.GetValueOrDefault(false);
             config.closeAfterChanging = closeAfterChanging.IsChecked.GetValueOrDefault(false);
             config.selected_folder = selectedPath?.EXEFilePath ?? string.Empty;
-
+            SaveConfigFile(config);
+        }
+        public static void SaveConfigFile(Config config,string filename = "SplashScreenConfig.uae")
+        {
             var saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "UAE files (*.uae)|*.uae"; 
-            saveFileDialog.FileName = "SplashScreenConfig.uae";
+            saveFileDialog.Filter = "UAE files (*.uae)|*.uae";
+            saveFileDialog.FileName = filename;
 
             var result = saveFileDialog.ShowDialog();
             if (result.HasValue && result.Value)
             {
                 string filePath = saveFileDialog.FileName;
-                File.WriteAllText(filePath,JsonConvert.SerializeObject(config));
+                File.WriteAllText(filePath, JsonConvert.SerializeObject(config));
             }
-        }
 
+        }
         private void SelectPath(object sender, RoutedEventArgs e)
         {
             var selectedAppType = apps.SelectedItem as AppSelectionItem;

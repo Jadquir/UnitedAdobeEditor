@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
@@ -18,6 +19,10 @@ namespace UnitedAdobeEditor.Components.Classes
         public bool closeAfterChanging;
         public string selected_folder;
 
+        public virtual Image? GetImage()
+        {
+            return Misc.ImageFromBase64String(image ?? image_base64);
+        }
         public Operation? ToOperation(out string error)
         {
             error = "";
@@ -27,7 +32,7 @@ namespace UnitedAdobeEditor.Components.Classes
                 error = "Invalid Adobe application Type!";
                 return null;
             }
-            var SplashScreen = Misc.ImageFromBase64String(image ?? image_base64);
+            var SplashScreen = GetImage();
             if (SplashScreen is null)
             {
                 error = "Invalid Splash Screen Data!";

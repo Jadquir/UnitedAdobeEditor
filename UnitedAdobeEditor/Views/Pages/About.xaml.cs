@@ -19,6 +19,8 @@ using Version = JadUpdate.Class.Version;
 using UnitedAdobeEditor.Components;
 using System.Diagnostics;
 using System.IO;
+using UnitedAdobeEditor.Components.Firebase;
+using MRA_WPF.Views.Windows.MRA_FirebaseUI;
 
 namespace UnitedAdobeEditor.Views.Pages
 {
@@ -48,7 +50,42 @@ namespace UnitedAdobeEditor.Views.Pages
             mailButton.SetIcon("mail");
 
             UpdateUIforUpdates();
+
+            tabControl.SelectionChanged += TabControl_SelectionChanged;
+            UpdateUIForUser();
         }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (userTabItem.IsSelected)
+            {
+                UpdateUIForUser();
+            }
+        }
+        private void LoggedInState(bool loggedIn)
+        {
+            notLoggedinPanel.Visibility = loggedIn.VisibleIfFalse();
+            userInfoPanel.Visibility = loggedIn.VisibleIfTrue();
+        }
+        private void UpdateUIForUser()
+        {
+            var client = FirebaseAuthControl.Instance?.Client;
+            if (client is null)
+            {
+                LoggedInState(false);
+                return;
+            }
+            var user = client.User;
+            if (user is null)
+            {
+                LoggedInState(false);
+                return;
+            }
+            LoggedInState(true);
+            username.Text = user.Info.DisplayName;
+            email.Text = user.Info.Email;
+        }
+
         public void UpdateUIforUpdates()
         {
             UpdateText.Text = "Current Version : " + App.Version.GetVersionText();
@@ -153,5 +190,28 @@ namespace UnitedAdobeEditor.Views.Pages
             }
         }
 
+        private async void SignOut(object sender, RoutedEventArgs e)
+        {
+           await  MessageBoxJ.ShowYesNo("Are you sure you want to sign out?", (s, e) =>
+            {
+                signout();
+                MainWindow.Instance.ShowSnackBar("You have signed out!", "Signed out!", icon: Wpf.Ui.Common.SymbolRegular.ArrowExit20);
+
+            });
+
+            UpdateUIForUser();
+        }
+        private void signout()
+        {
+            if (FirebaseAuthControl.Instance?.Client?.User is not null)
+                FirebaseAuthControl.Instance?.Client?.SignOut();
+            UpdateUIForUser();
+        }
+
+        private void Login(object sender, RoutedEventArgs e)
+        {
+            new MRA_Login().ShowDialog();
+            UpdateUIForUser();
+        }
     }
 }
