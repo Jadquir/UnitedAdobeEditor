@@ -1,0 +1,50 @@
+﻿<ui:UiPage
+    x:Class="UnitedAdobeEditor.Views.ShareConfigPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:UnitedAdobeEditor.Views"
+    xmlns:local1="clr-namespace:UnitedAdobeEditor.Views.CustomControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="ShareConfigPage"
+    d:DesignWidth="800"
+    Style="{StaticResource UiPageScrollable}"
+    mc:Ignorable="d">
+    <StackPanel Grid.Row="1" Margin="0,10">
+        <StackPanel
+            Grid.Row="1"
+            Margin="0,10"
+            HorizontalAlignment="Center">
+            <TextBlock
+                Margin="0,00,0,10"
+                HorizontalAlignment="Center"
+                FontSize="17"
+                FontWeight="SemiBold">
+                First select the application
+            </TextBlock>
+            <ComboBox
+                x:Name="apps"
+                Width="250"
+                Cursor="Hand" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Margin="0,10">
+            <TextBlock
+                Margin="0,00,0,00"
+                HorizontalAlignment="Center"
+                FontSize="17"
+                FontWeight="SemiBold">
+                Select the custom splash screen
+            </TextBlock>
+            <local1:ImageSelector x:Name="imageSelector" />
+        </StackPanel>
+        <StackPanel Margin="0,0,0,20">
+            <ui:Button
+                Width="180"
+                HorizontalAlignment="Center"
+                Click="ShareClick"
+                Content="Share Config" Cursor="Hand"
+                Icon="Share24" />
+        </StackPanel >
+    </StackPanel>
+</ui:UiPage>

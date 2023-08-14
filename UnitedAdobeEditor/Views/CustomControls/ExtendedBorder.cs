@@ -18,8 +18,8 @@ namespace UnitedAdobeEditor.Views.CustomControls
         private bool click = false;
         public ExtendedBorder()
         {
-            ChangeColor(false, false);
             CornerRadius = new CornerRadius(10);
+            this.Loaded += (s,e) => ChangeColor(false, false);
         }
 
 

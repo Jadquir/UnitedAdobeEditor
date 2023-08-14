@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
@@ -14,7 +15,14 @@ namespace UnitedAdobeEditor.Components.Classes
         public string app_type;
         public string image_base64;
         public string image;
+        public bool is_silent;
+        public bool closeAfterChanging;
+        public string selected_folder;
 
+        public virtual Image? GetImage()
+        {
+            return Misc.ImageFromBase64String(image ?? image_base64);
+        }
         public Operation? ToOperation(out string error)
         {
             error = "";
@@ -24,7 +32,7 @@ namespace UnitedAdobeEditor.Components.Classes
                 error = "Invalid Adobe application Type!";
                 return null;
             }
-            var SplashScreen = Misc.ImageFromBase64String(image ?? image_base64);
+            var SplashScreen = GetImage();
             if (SplashScreen is null)
             {
                 error = "Invalid Splash Screen Data!";
@@ -37,26 +45,30 @@ namespace UnitedAdobeEditor.Components.Classes
                 SplashScreen = SplashScreen
             };
         }
-
+        public static readonly Dictionary<string, AdobeType> appTypes = new Dictionary<string, AdobeType>()
+        {
+            { "ps" , AdobeType.Photoshop },
+            { "ps_beta" , AdobeType.PhotoshopBeta },
+            { "pr" ,AdobeType.PremierePro },
+            { "ae" ,AdobeType.AfterEffects },
+            { "ai" ,AdobeType.Illustrator },
+            { "me" ,AdobeType.MediaEncoder },
+            { "an" ,AdobeType.Animate },
+            { "au" ,AdobeType.Audition },
+            { "lr" ,AdobeType.Lightroom },
+            { "lrc", AdobeType.LightroomClassic },
+            { "id" ,AdobeType.InDesign },
+            { "dw" ,AdobeType.Dreamweaver },
+            { "ic" ,AdobeType.InCopy },
+            { "ch" ,AdobeType.CharacterAnimator } 
+        };
         private AdobeType? GetAppType()
         {
-            return app_type switch
+            if (appTypes.TryGetValue(app_type,out var adobeType))
             {
-                "ps" => AdobeType.Photoshop,
-                "pr" => AdobeType.PremierePro,
-                "ae" => AdobeType.AfterEffects,
-                "ai" => AdobeType.Illustrator,
-                "me" => AdobeType.MediaEncoder,
-                "an" => AdobeType.Animate,
-                "au" => AdobeType.Audition,
-                "lr" => AdobeType.Lightroom,
-                "lrc" => AdobeType.LightroomClassic,
-                "id" => AdobeType.InDesign,
-                "dw" => AdobeType.Dreamweaver,
-                "ic" => AdobeType.InCopy,
-                "ch" => AdobeType.CharacterAnimator,
-                _ => null
-            };
+                return adobeType;
+            }
+            return null;
         }
     }
 }

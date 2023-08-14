@@ -1,0 +1,35 @@
+﻿<UserControl
+    x:Class="UnitedAdobeEditor.Views.CustomControls.ExploreFilters"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:UnitedAdobeEditor.Views.CustomControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Margin="0,0,25,0" Orientation="Horizontal">
+            <TextBlock
+                Margin="0,0,10,0"
+                VerticalAlignment="Center"
+                Foreground="AliceBlue">
+                Filter:
+            </TextBlock>
+            <ComboBox
+                x:Name="apps"
+                Width="180"
+                MaxWidth="180" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock
+                Margin="0,0,10,0"
+                VerticalAlignment="Center"
+                Foreground="AliceBlue">
+                Order:
+            </TextBlock>
+            <ComboBox
+                x:Name="sort"
+                Width="180"
+                MaxWidth="180" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

@@ -8,6 +8,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -17,6 +19,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using UnitedAdobeEditor.Components.Enums;
 using UnitedAdobeEditor.Components.Helpers;
+using UnitedAdobeEditor.Components.Scripts;
 using ThreadState = System.Threading.ThreadState;
 
 namespace UnitedAdobeEditor.Components
@@ -80,25 +83,22 @@ namespace UnitedAdobeEditor.Components
         }
         public static Image? ImageFromBase64String(string base64String)
         {
-            try
+            return BitmapGetter.ImageFromBase64String(base64String);
+        }
+        public static string ImageToBase64(Image image)
+        {
+            using (MemoryStream ms = new MemoryStream())
             {
-                // Remove the "data:image/png;base64," part from the base64 string
-                base64String = base64String.Replace("data:image/png;base64,", "");
+                // Save the image to the memory stream in a format like JPEG or PNG
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 
-                // Convert the base64 string to a byte array
-                byte[] imageBytes = Convert.FromBase64String(base64String);
+                // Convert the memory stream to a byte array
+                byte[] imageBytes = ms.ToArray();
 
-                // Create a MemoryStream from the byte array
-                using (MemoryStream memoryStream = new MemoryStream(imageBytes))
-                {
-                    // Create the image from the MemoryStream
-                    return Image.FromStream(memoryStream);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                return null;
+                // Convert the byte array to a base64 string
+                string base64String = Convert.ToBase64String(imageBytes);
+
+                return base64String;
             }
         }
         private static string GetOnlyFolder(string path)
@@ -145,23 +145,32 @@ namespace UnitedAdobeEditor.Components
             LoadedImages[filepath] = bitmap;
             return bitmap;
         }
-        public static BitmapImage ConvertDrawingImageToBitmapImage(System.Drawing.Image drawingImage)
+        public static BitmapImage ConvertDrawingImageToBitmapImage(System.Drawing.Image drawingImage, ImageFormat? format = null)
         {
-            using (MemoryStream memoryStream = new MemoryStream())
+            try
             {
-                // Save the System.Drawing.Image to the MemoryStream in the desired format
-                drawingImage.Save(memoryStream, ImageFormat.Png); // You can change the format if needed (e.g., JPEG, BMP, etc.)
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    // Save the System.Drawing.Image to the MemoryStream in the desired format
+                    drawingImage.Save(memoryStream, format ?? ImageFormat.Png); // You can change the format if needed (e.g., JPEG, BMP, etc.)
 
-                // Create a new BitmapImage
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.StreamSource = memoryStream;
-                bitmapImage.EndInit();
-                bitmapImage.Freeze(); // Freeze the BitmapImage to make it read-only and thread-safe
+                    // Create a new BitmapImage
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.StreamSource = memoryStream;
+                    bitmapImage.EndInit();
+                    bitmapImage.Freeze(); // Freeze the BitmapImage to make it read-only and thread-safe
 
-                return bitmapImage;
+                    return bitmapImage;
+                }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return null;
+            }
+            
         }
         public static BitmapImage ImageFromResource(string relativePath)
         {
@@ -201,6 +210,79 @@ namespace UnitedAdobeEditor.Components
             worker.DoWork += action;
             worker.RunWorkerAsync();
 
+        }
+        public static BitmapImage? FromUrl(string? url)
+        {
+            if (string.IsNullOrEmpty(url))
+                return null;
+            if (LoadedImages.ContainsKey(url))
+                return LoadedImages[url];
+            try
+            {
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(url, UriKind.Absolute);
+                bitmap.EndInit();
+
+                LoadedImages[url] = bitmap;
+
+                return bitmap;
+            }
+            catch (Exception ex)
+            {
+                // handle the exception here
+                Debug.WriteLine("An error occurred FromUrl: " + ex.Message);
+                return null;
+            }
+        }
+
+        private static readonly Dictionary<string, Image> LoadedImagesFromURL = new Dictionary<string, Image>();
+        static readonly HttpClient client = new HttpClient();
+        public static async Task< Image >ImageFromUrlAsync(string url,string id)
+        {
+            if (string.IsNullOrEmpty(url))
+                return null;
+            if (LoadedImagesFromURL.TryGetValue(url, out var image))
+                return image;
+
+            var path = Path.Combine(Files.CacheFolder, $"{id}.png");
+            if (File.Exists(path))
+            {
+                try
+                {
+                    var loaded = Image.FromFile(path);
+                    LoadedImagesFromURL[url] = loaded;
+                    return loaded;
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+
+            try
+            {
+                using (Stream stream = await client.GetStreamAsync(url))
+                {
+                    var img = Image.FromStream(stream);
+                    LoadedImagesFromURL[url] = img;
+                    try
+                    {
+                        img.Save(path);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                    return img;
+                }
+            }
+            catch (Exception ex)
+            {
+                // handle the exception here
+                Debug.WriteLine("An error occurred FromUrl: " + ex.Message);
+                return null;
+            }
         }
     }
 }

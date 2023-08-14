@@ -26,6 +26,13 @@ namespace UnitedAdobeEditor.Components.Helpers
                 return di.FullName;
             }
         }
+        public static string FirebaseUserPath
+        {
+            get
+            {
+                return AppFolder + "\\user.dat";
+            }
+        }
         public static string AppFolder
         {
             get
@@ -90,6 +97,16 @@ namespace UnitedAdobeEditor.Components.Helpers
             get
             {
                 string folder = AdobeAppBackupFolder + "\\SplashScreenBackup\\";
+                if (!Directory.Exists(folder)) { Directory.CreateDirectory(folder); }
+                return folder;
+            }
+        }
+
+        public static string CacheFolder
+        {
+            get
+            {
+                string folder = AppFolder + "\\Cache\\";
                 if (!Directory.Exists(folder)) { Directory.CreateDirectory(folder); }
                 return folder;
             }

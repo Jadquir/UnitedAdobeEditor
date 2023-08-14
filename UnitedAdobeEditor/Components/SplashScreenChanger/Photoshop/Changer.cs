@@ -151,7 +151,7 @@ namespace UnitedAdobeEditor.Components.SplashScreenChanger.Photoshop
 
 
             LoadingStateController.SetState(LoadingStateController.State.ChangingColors, sender);
-            ChangeTextColors();
+            await ChangeTextColors();
 
             Misc.SetStatePleaseWait();
             MessageBoxJ.ShowOK("Successfully changed Photoshop Splash Screen.");
@@ -201,18 +201,33 @@ namespace UnitedAdobeEditor.Components.SplashScreenChanger.Photoshop
             }
             MessageBoxJ.ShowOK("Successfully changed splash screen to the original!");
         }
-
-        private static async void ChangeTextColors()
+        private static readonly Dictionary<string, bool> SplashColors = new Dictionary<string, bool>()
         {
-            string valueToChange = "SplashBoxLoadingText";
-            await ColorChanger.ColorChanger.ChangeInUIColors(valueToChange, SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.TextColor]);
-            
-            valueToChange = "SplashBoxTextBackground"; 
-            await ColorChanger.ColorChanger.ChangeInUIColors(valueToChange, SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.BackgroundColor]);
+            // Value to Change : use TextColor
+            {"SplashBoxLoadingText", true },
+            {"AboutBoxTextAlt", true },
+            {"AboutBoxFill", true },
+            {"SplashBoxLegalText", true },
+            {"SplashBoxTextBackground", false },
+            {"AboutBoxFillAlt", false },
+        };
+        private static async Task ChangeTextColors()
+        {
+            for (int i = 0; i < SplashColors.Count; i++)
+            {
+                var item = SplashColors.ElementAt(i);
 
-            valueToChange = "SplashBoxLegalText"; 
-            await ColorChanger.ColorChanger.ChangeInUIColors(valueToChange, 
-                SaveData.Instance.SplashScreenColors[SaveData.SplashScreenColor.TextColor], true);
+                await ColorChanger.ColorChanger.ChangeInUIColors(
+                    item.Key,
+                    SaveData.Instance.SplashScreenColors
+                    [
+                        item.Value ? 
+                        SaveData.SplashScreenColor.TextColor : 
+                        SaveData.SplashScreenColor.BackgroundColor
+                    ],
+                    i + 1 == SplashColors.Count);
+
+            }
         }
 
         private static bool ExtractFile()
