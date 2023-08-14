@@ -34,6 +34,10 @@ You can do the following things with this application:
 
 ![Photoshop UI Color Changer UI](https://img.itch.zone/aW1hZ2UvMTcwMTg5Ny8xMDAyNjU5NS5wbmc=/original/%2BrWmtB.png "Photoshop UI Color Changer UI")
 
+# Create a Splash Screen
+You can now create splash screens online: https://jadquir.com/sscreator/
+You can use this tool to easily create and change splash screens with United Adobe Editor
+
 # Download
 You can download it from Itch.io: https://jadquir.itch.io/united-adobe-editor
 
