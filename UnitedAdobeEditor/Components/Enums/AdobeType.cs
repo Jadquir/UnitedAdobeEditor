@@ -8,17 +8,18 @@ namespace UnitedAdobeEditor.Components.Enums
 {
     public enum AdobeType
     {
-        Photoshop,
+        Photoshop, //
         PhotoshopBeta,
-        Illustrator,
-        AfterEffects,
-        PremierePro,
-        MediaEncoder,
-        Animate,
-        Audition,
-        Lightroom,
-        LightroomClassic,
-        InDesign,
+        Illustrator,//
+        AfterEffects,//
+        PremierePro,//
+        MediaEncoder,//
+
+        Animate,//
+        Audition,//
+        Lightroom,//
+        LightroomClassic, //
+        InDesign,//
         Dreamweaver,
         InCopy,
         CharacterAnimator

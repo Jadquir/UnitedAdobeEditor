@@ -1,5 +1,6 @@
 ﻿using JadUpdate.Class;
 using Newtonsoft.Json;
+using ProtoBuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -32,21 +34,22 @@ using UnitedAdobeEditor.Components.Scripts;
 using UnitedAdobeEditor.Views;
 using UnitedAdobeEditor.Views.CustomControls;
 using UnitedAdobeEditor.Views.Pages;
+using Wpf.Ui;
 using Wpf.Ui.Animations;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Hardware;
-using Wpf.Ui.Services;
 using WpfScreenHelper;
 using ColorChanger = UnitedAdobeEditor.Views.Pages.ColorChanger;
-using Page = UnitedAdobeEditor.Components.Enums.Page;
+using NavigatingCancelEventArgs = System.Windows.Navigation.NavigatingCancelEventArgs;
+using PageEnum = UnitedAdobeEditor.Components.Enums.PageEnum;
 
 namespace UnitedAdobeEditor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : UiWindow
+    public partial class MainWindow : FluentWindow
     {
         public static MainWindow Instance;
 
@@ -62,6 +65,10 @@ namespace UnitedAdobeEditor
             Instance = this;
 
             InitializeComponent();
+
+            snackbarService.SetSnackbarPresenter(this.snackbarPresenter);
+            contentDialogService.SetContentPresenter(this.dialogContentPresenter);
+
             Thickness resizeBorderThickness = WindowChrome.GetWindowChrome(this).ResizeBorderThickness;
 
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - resizeBorderThickness.Top - resizeBorderThickness.Bottom + 8;
@@ -79,7 +86,7 @@ namespace UnitedAdobeEditor
 
             this.Loaded += (s, e) =>
             {
-                Navigate(Page.MainMenu);
+                Navigate(PageEnum.MainMenu);
                 CheckUpdates();
 
                 if (!string.IsNullOrEmpty(App.loadedFile))
@@ -98,17 +105,23 @@ namespace UnitedAdobeEditor
                 settingsButton.Visibility = e.Content is MainMenu ? Visibility.Visible : Visibility.Collapsed;
                 BackButton.Visibility = RootNav.CanGoBack ? Visibility.Visible : Visibility.Collapsed;
                 GoBackDisabled = e.Content is Loading;
-                Transitions.ApplyTransition(e.Content, TransitionType.FadeInWithSlide, 150);
+
+                Wpf.Ui.Animations.TransitionAnimationProvider.
+                ApplyTransition(e.Content, Wpf.Ui.Animations.Transition.FadeInWithSlide, 150);
                 UpdateText();
             };
 
             this.ContentRendered += MainWindow_ContentRendered;
+
+            this.MinWidth = 580;
+            this.MinHeight = 450;
         }
 
         private void MainWindow_ContentRendered(object? sender, EventArgs e)
         {
-            Wpf.Ui.Appearance.Background.Apply(this, GetBackgroundType());
-            Wpf.Ui.Appearance.Accent.ApplySystemAccent();
+            this.ApplyBackground();
+            //Wpf.Ui.Appearance.Background.Apply(this, GetBackgroundType());
+            //Wpf.Ui.Appearance.Accent.ApplySystemAccent();
         }
 
         private void Instances()
@@ -118,43 +131,78 @@ namespace UnitedAdobeEditor
             _ = new Components.SplashScreenChanger.SaveData();
         }
 
-        public void ShowSnackBar(string title, string text,
-            Wpf.Ui.Common.ControlAppearance appearance = Wpf.Ui.Common.ControlAppearance.Dark,
-            Wpf.Ui.Common.SymbolRegular icon = Wpf.Ui.Common.SymbolRegular.CheckmarkCircle32,
-            float seconds = 2f)
+        //public void ShowSnackBar(string title, string text,
+        //    Wpf.Ui.Common.ControlAppearance appearance = Wpf.Ui.Common.ControlAppearance.Dark,
+        //    Wpf.Ui.Common.SymbolRegular icon = Wpf.Ui.Common.SymbolRegular.CheckmarkCircle32,
+        //    float seconds = 2f)
+        //{
+        //    snackbar.Appearance = appearance;
+        //    snackbar.Icon = icon;
+        //    snackbar.Timeout = (int)(seconds * 1000);
+        //    snackbar.Show(title, text);
+        //}
+        #region Snackbar
+        ISnackbarService snackbarService = new SnackbarService();
+        public void ShowSnackBar(string title,
+            string text,
+            Wpf.Ui.Controls.SymbolRegular icon = Wpf.Ui.Controls.SymbolRegular.Empty,
+            int timeout = 4200,
+            ControlAppearance appearance =
+            ControlAppearance.Secondary)
         {
-            snackbar.Appearance = appearance;
-            snackbar.Icon = icon;
-            snackbar.Timeout = (int)(seconds * 1000);
-            snackbar.Show(title, text);
+            ShowSnackBar(text, title, new SymbolIcon(icon), timeout, appearance);
         }
-        public Dialog GetDialog()
+        public void ShowSnackBar(string title,
+            string text, 
+            IconElement? icon,
+            int timeout = 4200,
+            ControlAppearance appearance =
+            ControlAppearance.Secondary)
         {
-            dialog.MinHeight = this.Height * (2 / 3);
-            dialog.MinWidth = this.Width * (2 / 3);
-            
-            return dialog;
+            ShowSnackBar(title, text, icon, TimeSpan.FromMilliseconds(timeout), appearance);
         }
-        public void Navigate(Page page, object[]? param = null)
+        public void ShowSnackBar(string title,
+            string text,
+            IconElement? icon,
+            TimeSpan? timeout = null,
+            ControlAppearance appearance =
+            ControlAppearance.Secondary)
         {
-            UiPage? uiPage = null;
+            if (!timeout.HasValue)
+                timeout = TimeSpan.FromMilliseconds(1000);
+            snackbarService.Show(text, title, appearance, icon, timeout.Value);
+        }
+        #endregion
+
+
+        #region Dialog
+        IContentDialogService contentDialogService = new ContentDialogService();
+        internal IContentDialogService GetDialog()
+        {
+            return contentDialogService;
+        }
+        #endregion
+
+        public void Navigate(PageEnum page, object[]? param = null)
+        {
+            Page? uiPage = null;
             switch (page)
             {
-                case Page.MainMenu:
+                case PageEnum.MainMenu:
                     uiPage = new MainMenu();
                     break;
-                case Page.Settings:
+                case PageEnum.Settings:
                     break;
-                case Page.VersionSelector:
+                case PageEnum.VersionSelector:
                     uiPage = new VersionSelector();
                     break;
-                case Page.ExploreConfigs:
+                case PageEnum.ExploreConfigs:
                     uiPage = new ExploreConfigsPage();
                     break;
-                case Page.ShareConfigPage:
+                case PageEnum.ShareConfigPage:
                     uiPage = new ShareConfigPage();
                     break;
-                case Page.OperationSelector:
+                case PageEnum.OperationSelector:
                     if ((CurrentOperation.AppType == AdobeType.Photoshop || CurrentOperation.AppType == AdobeType.PhotoshopBeta)
                         && !CurrentOperation.IsConfigActivated)
                     {
@@ -162,29 +210,29 @@ namespace UnitedAdobeEditor
                     }
                     else
                     {
-                        Navigate(Page.SplashScreenChanger, param);
+                        Navigate(PageEnum.SplashScreenChanger, param);
                         return;
                     }
                     break;
-                case Page.ColorChanger:
+                case PageEnum.ColorChanger:
                     CurrentOperation.operationType = OperationType.UIColor;
                     uiPage = new ColorChanger();
                     break;
-                case Page.SplashScreenChanger:
+                case PageEnum.SplashScreenChanger:
                     CurrentOperation.operationType = OperationType.SplashScreen;
 
                     uiPage = new SplashScreenChanger();
                     break;
-                case Page.AdvancedColors:
+                case PageEnum.AdvancedColors:
                     uiPage = new AdvancedColors();
                     break;
-                case Page.CreateConfig:
+                case PageEnum.CreateConfig:
                     uiPage = new CreateConfig();
                     break;
-                case Page.Loading:
+                case PageEnum.Loading:
                     uiPage = new Loading();
                     break;
-                case Page.About:
+                case PageEnum.About:
                     uiPage = new About();
                     break;
                 default:
@@ -192,11 +240,11 @@ namespace UnitedAdobeEditor
             }
             if (uiPage == null)
             {
-                Navigate(Page.MainMenu);
+                Navigate(PageEnum.MainMenu);
                 return;
             }
             RootNav.Navigate(uiPage);
-            if(page == Page.Loading)
+            if(page == PageEnum.Loading)
             {
                 MainWindow.GoBackDisabled = true;
             }
@@ -230,22 +278,29 @@ namespace UnitedAdobeEditor
         }
         public void UpdateText()
         {
-            currentOpText.Visibility = (RootNav.Content is Loading ||
-                RootNav.Content is ColorChanger ||
-                RootNav.Content is SplashScreenChanger ||
-                RootNav.Content is OperationSelector)
-                ? Visibility.Visible : Visibility.Collapsed;
+            titleHeader.Text = App.Name;
 
-
-            if (CurrentOperation.SelectedPath == null)
-                return;
-            string text = CurrentOperation.SelectedPath.Title;
-            if ((RootNav.Content is Loading || RootNav.Content is ColorChanger || RootNav.Content is SplashScreenChanger)
-                && RootNav.Content is not OperationSelector)
+            string text = "UAE";
+            if(RootNav.Content is VersionSelector versionSelector)
             {
-                text += $" | {CurrentOperation.operationType.GetText()}";
+                text += " | Adobe " + versionSelector.GetAppType().ToFriendlyString();
             }
-            currentOpText.Text = text;
+            else if (RootNav.Content is OperationSelector operationSelector)
+            {
+                text += " | " + CurrentOperation.SelectedPath.Title;
+            }
+            if (RootNav.Content is ColorChanger || 
+                RootNav.Content is SplashScreenChanger || 
+                RootNav.Content is Loading ||
+                RootNav.Content is AdvancedColors 
+                )
+            {
+
+                text += $" | {CurrentOperation.SelectedPath.Title} | {CurrentOperation.operationType.GetText()}";
+            }
+
+          
+            titleHeader.Text = text;
         }
         public void BackButton_Click(object sender, RoutedEventArgs e)
         {
@@ -269,7 +324,7 @@ namespace UnitedAdobeEditor
         }
         private void settingsButton_Click(object sender, RoutedEventArgs e)
         {
-            Navigate(Page.About);
+            Navigate(PageEnum.About);
         }
         public void CheckUpdates(EventHandler? onCheck = null)
         {
@@ -298,10 +353,11 @@ namespace UnitedAdobeEditor
             }));
         }
 
-        internal static BackgroundType GetBackgroundType()
+        public static WindowBackdropType GetBackgroundType()
         {
-            return Wpf.Ui.Appearance.Background.IsSupported(BackgroundType.Mica) ?
-                BackgroundType.Mica : BackgroundType.None;
+            if (WindowBackdrop.IsSupported(WindowBackdropType.Mica))
+                return WindowBackdropType.Mica;
+            return WindowBackdropType.None;
         }
 
         internal void NavigateBack()
@@ -402,5 +458,34 @@ namespace UnitedAdobeEditor
             }
           
         }
+
+        private void FluentWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var window = sender as Window;
+
+            //if (window.Width < window.MinWidth)
+            //    window.Width = window.MinWidth;
+
+            //if (window.Height < window.MinHeight)
+            //    window.Height = window.MinHeight;
+        }
+
+        private void RootNav_Navigated(object sender, NavigationEventArgs e)
+        {
+            ScrollToTop();
+        }
+
+        internal void ScrollToTop()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                scrollViewer.ScrollToHome();
+            });
+        }
+        //protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        //{
+        //    base.OnRenderSizeChanged(sizeInfo);
+        //    sizeInfo.WidthChanged
+        //}
     }
 }

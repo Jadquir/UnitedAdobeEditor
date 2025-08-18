@@ -9,14 +9,15 @@ namespace UnitedAdobeEditor.Components.Classes.SplashScreenData
 {
     public class ImageDataBase
     {
-        public ImageDataBase(Size ımageSize, string name)
+        public ImageDataBase(Size imageSize, string name)
         {
-            ImageSize = ımageSize;
+            ImageSize = imageSize;
             Name = name;
         }
 
         public Size ImageSize { get; set; }
         public string Name { get; set; }
 
+        internal virtual bool HasDarkVariant() => false;
     }
 }

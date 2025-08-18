@@ -22,6 +22,7 @@
             VerticalAlignment="Center"
             FontSize="{Binding HeaderFontSize}"
             FontWeight="Bold"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
             Text="{Binding HeaderText}"
             TextAlignment="Center" />
     </Grid>

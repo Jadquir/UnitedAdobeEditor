@@ -23,7 +23,7 @@ namespace MRA_WPF.Views.Windows.MRA_FirebaseUI.UI
     /// <summary>
     /// Register.xaml etkileşim mantığı
     /// </summary>
-    public partial class Register : UiPage
+    public partial class Register : Page
     {
         public Register()
         {

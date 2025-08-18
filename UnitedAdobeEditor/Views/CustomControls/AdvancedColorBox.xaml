@@ -7,12 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     FontFamily="Montserrat"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
 
     <Border
         Margin="10"
         Background="{StaticResource secBrush}"
-        CornerRadius="15">
+        BorderBrush="#1EFFFFFF"
+        BorderThickness="1"
+        CornerRadius="15"
+        Cursor="Arrow">
 
         <Border.Effect>
             <DropShadowEffect
@@ -45,51 +49,70 @@
                     <ColumnDefinition Width="20" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock
-                        Grid.Row="0"
-                        Padding="4,0,4,0"
-                        HorizontalAlignment="Center"
-                        FontSize="12"
-                        TextAlignment="Center"
-                        TextTrimming="WordEllipsis"
-                        TextWrapping="Wrap">
-                        Color
-                    </TextBlock>
-                    <local:ExtendedBorder
-                        x:Name="colorSelect"
-                        Width="107"
-                        Height="35"
-                        Margin="0,15,0,0"
-                        Background="Red"
-                        CornerRadius="3"
-                        Cursor="Hand" />
-                </StackPanel>
-                <StackPanel
+                <Border
+                    Grid.Column="0"
+                    Padding="3"
+                    BorderBrush="#14FFFFFF"
+                    BorderThickness="1"
+                    CornerRadius="10">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock
+                            Grid.Row="0"
+                            Padding="4,0,4,0"
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            TextAlignment="Center"
+                            TextTrimming="WordEllipsis"
+                            TextWrapping="Wrap">
+                            Color
+                        </TextBlock>
+                        <local:ExtendedBorder
+                            x:Name="colorSelect"
+                            Width="107"
+                            Height="35"
+                            Margin="0,15,0,0"
+                            Background="Red"
+                            BorderBrush="#19FFFFFF"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Cursor="Hand" />
+                    </StackPanel>
+                </Border>
+                <Border
                     Grid.Column="2"
-                    Margin="0,0,0,0"
-                    Orientation="Vertical">
-                    <TextBlock
-                        Grid.Row="0"
-                        Padding="4,0,4,0"
-                        HorizontalAlignment="Center"
-                        FontSize="12"
-                        TextAlignment="Center"
-                        TextTrimming="WordEllipsis"
-                        TextWrapping="Wrap">
-                        Opacity
-                    </TextBlock>
-                    <ui:NumberBox
-                        x:Name="numberBox"
-                        Margin="0,15,0,0"
-                        ClearButtonEnabled="False"
-                        Cursor="IBeam"
-                        DecimalPlaces="1"
-                        Max="1"
-                        Min="0"
-                        Step="0.1"
-                        Value="1" />
-                </StackPanel>
+                    Padding="3"
+                    BorderBrush="#14FFFFFF"
+                    BorderThickness="1"
+                    CornerRadius="10">
+                    <StackPanel
+                        Grid.Column="2"
+                        Margin="0,0,0,0"
+                        Orientation="Vertical">
+                        <TextBlock
+                            Grid.Row="0"
+                            Padding="4,0,4,0"
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            TextAlignment="Center"
+                            TextTrimming="WordEllipsis"
+                            TextWrapping="Wrap">
+                            Opacity
+                        </TextBlock>
+                        <ui:NumberBox
+                            x:Name="numberBox"
+                            Margin="0,15,0,0"
+                            BorderBrush="#19FFFFFF"
+                            BorderThickness="1"
+                            ClearButtonEnabled="False"
+                            Cursor="IBeam"
+                            LargeChange="0.1"
+                            MaxDecimalPlaces="1"
+                            Maximum="1"
+                            Minimum="0"
+                            SmallChange="0.1"
+                            Value="1" />
+                    </StackPanel>
+                </Border>
             </Grid>
         </Grid>
     </Border>

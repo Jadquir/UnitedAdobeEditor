@@ -1,4 +1,5 @@
 ﻿using MRA_WPF.Views.Pages;
+using ProtoBuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace UnitedAdobeEditor.Views.Pages.Base
         protected abstract IAsyncEnumerable<object> GetItems();
         protected async Task Reload()
         {
+            SetEmptyText("");
             if (EnableLoading)
                 SetLoadingState(true, true);
             PlaylistHolder.Items.Clear();
@@ -37,6 +39,8 @@ namespace UnitedAdobeEditor.Views.Pages.Base
             }
             if (EnableLoading)
                 SetLoadingState(false);
+
+            MainWindow.Instance.ScrollToTop();
         }
     }
 }

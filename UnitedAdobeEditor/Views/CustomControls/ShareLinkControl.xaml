@@ -8,6 +8,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
     <StackPanel>
         <TextBlock
@@ -27,7 +28,7 @@
                 VerticalAlignment="Center"
                 Click="Button_Click"
                 Cursor="Hand"
-                Icon="Copy16" />
+                Icon="{ui:SymbolIcon Copy16}" />
 
         </Grid>
     </StackPanel>

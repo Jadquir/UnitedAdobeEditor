@@ -112,6 +112,9 @@ namespace UnitedAdobeEditor.Components.Firebase
         }
         public static async Task UpdateStat(string id, StatType type)
         {
+#if DEBUG
+            return;
+#endif
             try
             {
                 var url = string.Format(updateStat_url, id, type.ToString());

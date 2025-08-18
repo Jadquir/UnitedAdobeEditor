@@ -85,10 +85,10 @@ namespace UnitedAdobeEditor.Components.ColorChanger
                 }
                 catch (Exception ex)
                 {
-                    MessageBoxJ.ShowOK("Error while changing UIColors : " + ex.Message);
+                    MessageBoxJ.ShowOK("Failed to change UI colors: " + ex.Message);
                     return;
                 }
-                MessageBoxJ.ShowOK("UIColors successfully changed!");
+                MessageBoxJ.ShowOK("UI colors successfully updated!");
         }
         private static async Task<bool> Backup()
         {
@@ -96,7 +96,8 @@ namespace UnitedAdobeEditor.Components.ColorChanger
             {
                 bool continueChanging = false;
                 await MessageBoxJ.ShowYesNo
-                    ("Application couldn't create the backup.\nPlease backup your UIColors.txt/cel.\nDo you want to continue changing color?",
+                    (
+ "The application could not create a backup.\nPlease manually back up your UIColors.txt/cel file.\nDo you want to continue changing colors?",
                      (s, e) => { continueChanging = true; }
                     );
 
@@ -126,10 +127,10 @@ namespace UnitedAdobeEditor.Components.ColorChanger
             {
                 ReadUIColors();
             }
-            int num = 0;
+            int num = -1;
             try
             {
-                for (int i = 0; i < UIColorsFile.Length; i++)
+                for (int i = 8; i < UIColorsFile!.Length; i++)
                 {
                     if (UIColorsFile[i].Trim() == valueToChange + ":")
                     {
@@ -143,24 +144,31 @@ namespace UnitedAdobeEditor.Components.ColorChanger
             }
             try
             {
-                string text = newValue;
-                if (allThemes)
+                if(num <= 0)
                 {
-                    UIColorsFile[num + 2] = text + ",";
-                    UIColorsFile[num + 3] = text + ",";
-                    UIColorsFile[num + 4] = text + ",";
-                    UIColorsFile[num + 5] = text;
+                    Debug.WriteLine(valueToChange + " not found in colors!");
                 }
-                else
+                if (num > 0)
                 {
-                    DesiredTheme desiredTheme = UIColorsData.Instance.desiredTheme;
-                    
-                    if (desiredTheme != DesiredTheme.Dark)
+                    string text = newValue;
+                    if (allThemes)
                     {
-                        text += ",";
+                        UIColorsFile![num + 2] = text + ",";
+                        UIColorsFile[num + 3] = text + ",";
+                        UIColorsFile[num + 4] = text + ",";
+                        UIColorsFile[num + 5] = text;
                     }
-                    int num2 = (int)desiredTheme;
-                    UIColorsFile[num + num2] = text;
+                    else
+                    {
+                        DesiredTheme desiredTheme = UIColorsData.Instance.desiredTheme;
+
+                        if (desiredTheme != DesiredTheme.Dark)
+                        {
+                            text += ",";
+                        }
+                        int num2 = (int)desiredTheme;
+                        UIColorsFile![num + num2] = text;
+                    }
                 }
             }
             catch (Exception)
@@ -244,12 +252,18 @@ namespace UnitedAdobeEditor.Components.ColorChanger
                 {
                     File.Copy(BackupFolder + "\\UIColors.txt", UIColorFilePath, overwrite: true);
                 }
+                UIColorsFile = null;
                 return (true, "Done");
             }
             catch (Exception ex)
             {
                 return (false, "Error : " + ex.Message);
             }
+        }
+
+        internal static void Null()
+        {
+            UIColorsFile = null;
         }
     }
 }

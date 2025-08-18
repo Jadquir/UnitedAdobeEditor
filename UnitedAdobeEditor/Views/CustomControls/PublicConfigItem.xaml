@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     MaxWidth="300"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
     <Border
         Margin="5"
@@ -84,12 +85,12 @@
                         Click="RunConfigClick"
                         Content="Run Config"
                         Cursor="Hand"
-                        Icon="Settings16" />
+                        Icon="{ui:SymbolIcon Settings16}" />
                     <ui:Button
                         Grid.Column="1"
                         Click="Button_Click"
                         Cursor="Hand"
-                        Icon="MoreHorizontal24">
+                        Icon="{ui:SymbolIcon MoreHorizontal24}">
                         <ui:Button.ContextMenu>
                             <ContextMenu>
                                 <ui:MenuItem
@@ -97,17 +98,17 @@
                                     Click="Copy_click"
                                     Cursor="Hand"
                                     Header="Copy Link"
-                                    SymbolIcon="Copy16" />
+                                    Icon="{ui:SymbolIcon Copy16}" />
                                 <ui:MenuItem
                                     Click="DownloadConfigClick"
                                     Cursor="Hand"
                                     Header="Save Config"
-                                    SymbolIcon="Save24" />
+                                    Icon="{ui:SymbolIcon Save24}" />
                                 <ui:MenuItem
                                     Click="DownloadSplashSCreenClick"
                                     Cursor="Hand"
                                     Header="Download Splash Screen"
-                                    SymbolIcon="ArrowDownload24" />
+                                    Icon="{ui:SymbolIcon ArrowDownload24}" />
                             </ContextMenu>
                         </ui:Button.ContextMenu>
                     </ui:Button>

@@ -55,7 +55,7 @@ namespace JadColorPicker
                 // seems to work better but we can't do that because calling `.Hide()` or setting
                 // `.Visibility` sets the `DialogResult` to `false`.
                 window.SetScreenRect(new Rect(0, 0, 0, 0));
-                window.SetImage(ScreenshotBitmapImage());
+                window.SetImage(ScreenshotBitmapImage(window));
                 window.SetScreenRect(CurrentScreenRect());
             };
             window.SetScreenRect(CurrentScreenRect());
@@ -66,7 +66,7 @@ namespace JadColorPicker
             }
         }
 
-        private BitmapImage ScreenshotBitmapImage()
+        private BitmapImage ScreenshotBitmapImage(Window? window = null)
         {
             var screenshot = TakeScreenshot();
 
@@ -87,16 +87,31 @@ namespace JadColorPicker
             return bitmapImage;
         }
 
-        private Bitmap TakeScreenshot()
+        private Bitmap TakeScreenshot(Window? window = null)
         {
             Rect screen = CurrentScreenRect();
-            var screenBitmap = new Bitmap((int)screen.Width, (int)screen.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+
+            // Get DPI scale for the current screen
+            var source = PresentationSource.FromVisual(window ?? Application.Current.MainWindow);
+            double dpiX = 1.0, dpiY = 1.0;
+
+            if (source != null)
+            {
+                dpiX = source.CompositionTarget.TransformToDevice.M11;
+                dpiY = source.CompositionTarget.TransformToDevice.M22;
+            }
+
+            int width = (int)(screen.Width * dpiX);
+            int height = (int)(screen.Height * dpiY);
+
+            var screenBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
             using (var g = Graphics.FromImage(screenBitmap))
             {
-                g.CopyFromScreen((int)screen.Left, (int)screen.Top, 0, 0, screenBitmap.Size);
+                g.CopyFromScreen((int)(screen.Left * dpiX), (int)(screen.Top * dpiY), 0, 0, new System.Drawing.Size(width, height));
             }
 
             return screenBitmap;
         }
+
     }
 }

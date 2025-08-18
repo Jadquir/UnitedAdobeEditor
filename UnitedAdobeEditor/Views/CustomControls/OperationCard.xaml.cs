@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using UnitedAdobeEditor.Components.Enums;
 using static System.Net.Mime.MediaTypeNames;
-using Page = UnitedAdobeEditor.Components.Enums.Page;
+using PageEnum = UnitedAdobeEditor.Components.Enums.PageEnum;
 
 namespace UnitedAdobeEditor.Views.CustomControls
 {
@@ -39,7 +39,7 @@ namespace UnitedAdobeEditor.Views.CustomControls
             OperationType = type;
             OnClick += (s, e) =>
             {
-                Page page = type == OperationType.UIColor ? Page.ColorChanger : Page.SplashScreenChanger;
+                PageEnum page = type == OperationType.UIColor ? PageEnum.ColorChanger : PageEnum.SplashScreenChanger;
                 MainWindow.Instance.Navigate(page);
             };
         }

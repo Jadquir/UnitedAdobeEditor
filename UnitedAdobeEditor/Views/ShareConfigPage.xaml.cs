@@ -24,7 +24,7 @@ namespace UnitedAdobeEditor.Views
     /// <summary>
     /// ShareConfigPage.xaml etkileşim mantığı
     /// </summary>
-    public partial class ShareConfigPage : UiPage
+    public partial class ShareConfigPage : Page
     {
         public ShareConfigPage()
         {

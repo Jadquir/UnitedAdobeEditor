@@ -23,9 +23,10 @@
                 R="195" />
             <Color
                 x:Key="shadowColor"
-                B="80"
-                G="73"
-                R="73" />
+                A="100"
+                B="60"
+                G="53"
+                R="53" />
             <SolidColorBrush
                 x:Key="secBrush"
                 Opacity="0.15"

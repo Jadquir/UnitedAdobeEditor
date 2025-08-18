@@ -9,6 +9,7 @@
     Padding="15"
     Cursor="Hand"
     FontFamily="Montserrat"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
     <Grid Width="350">
         <Grid.Triggers>

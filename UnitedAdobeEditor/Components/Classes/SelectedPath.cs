@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using UnitedAdobeEditor.Components.Classes.SplashScreenData;
 using UnitedAdobeEditor.Components.ColorChanger;
 using UnitedAdobeEditor.Components.Enums;
 using Path = System.IO.Path;
@@ -16,6 +17,7 @@ namespace UnitedAdobeEditor.Components.Classes
 {
     public class SelectedPath
     {
+
         public SelectedPath(string path, bool showMessageBox = true)
         {
             SuccessInit = false;
@@ -61,43 +63,56 @@ namespace UnitedAdobeEditor.Components.Classes
         public string Title 
         { 
             get 
-            { 
-                string title = Misc.GetFolderFromPath(EXEFilePath);
-
-                int maxLoop = 30;
-                int cur = 0;
-
-                string final = null;
-                if (!Misc.GetFolderName(title).Contains("Adobe"))
+            {
+                try
                 {
-                    while (true)
-                    {
-                        title = Misc.GetFolderFromPath(Path.GetFullPath(Path.Combine(title, @"..\")));
 
-                        if (Misc.GetFolderName(title).Contains("Adobe")) 
+                    string title = Misc.GetFolderFromPath(EXEFilePath);
+
+                    int maxLoop = 30;
+                    int cur = 0;
+
+                    string final = null;
+                    if (!Misc.GetFolderName(title).Contains("Adobe"))
+                    {
+                        while (true)
                         {
-                            Debug.WriteLine("folder name adobe");
-                            final = title;
-                            break; 
-                        }
-                        if (title.Length < 4)
-                        {
-                            Debug.WriteLine("path length too short");
-                            break;
-                        }
-                        cur++;
-                        if(cur >= maxLoop)
-                        {
-                            Debug.WriteLine("loop should end");
-                            break;
+                            title = Misc.GetFolderFromPath(Path.GetFullPath(Path.Combine(title, @"..\")));
+
+                            if (Misc.GetFolderName(title).Contains("Adobe"))
+                            {
+                                Debug.WriteLine("folder name adobe");
+                                final = title;
+                                break;
+                            }
+                            if (title.Length < 4)
+                            {
+                                Debug.WriteLine("path length too short");
+                                break;
+                            }
+                            cur++;
+                            if (cur >= maxLoop)
+                            {
+                                Debug.WriteLine("loop should end");
+                                break;
+                            }
                         }
                     }
+                    final ??= Misc.GetFolderFromPath(EXEFilePath);
+                    return Misc.GetFolderName(final);
                 }
-                if(final == null)
+                catch (Exception)
                 {
-                    final = Misc.GetFolderFromPath(EXEFilePath); 
+                    try
+                    {
+                        var final = Misc.GetFolderFromPath(EXEFilePath);
+                        return Misc.GetFolderName(final);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
-                return Misc.GetFolderName(final);
+                return string.Empty;
             } 
         }
 

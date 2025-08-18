@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:UnitedAdobeEditor.Views.CustomControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     FontFamily="Montserrat"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
 
     <Grid

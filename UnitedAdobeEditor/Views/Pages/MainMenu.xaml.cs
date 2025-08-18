@@ -29,16 +29,16 @@ namespace UnitedAdobeEditor.Views.Pages
     /// <summary>
     /// MainMenu.xaml etkileşim mantığı
     /// </summary>
-    public partial class MainMenu : UiPage
+    public partial class MainMenu : Page
     {
         public MainMenu()
         {
             InitializeComponent();
-
             foreach (AdobeType apptype in ((AdobeType[])Enum.GetValues(typeof(AdobeType))))
             {
                 list1.Items.Add(new AppSelector(apptype));
             }
+            //MainWindow.Instance.SizeChanged += ActionButtonsPanel_SizeChanged;
         }
 
         private void LoadConfig(object sender, RoutedEventArgs e)
@@ -135,7 +135,7 @@ namespace UnitedAdobeEditor.Views.Pages
             }
             if (CurrentOperation.SelectedPath != null)
             {
-                var isSuccess = SplashScreenChanger.Change(CurrentOperation.AppType, CurrentOperation.Operation.SplashScreen);
+                var isSuccess = SplashScreenChanger.Change(CurrentOperation.AppType, CurrentOperation.Operation.SplashScreen, SplashScreenChanger.ReplaceType.Both);
                 if (isSuccess && config.closeAfterChanging)
                 {
                     Application.Current.Shutdown();
@@ -148,7 +148,7 @@ namespace UnitedAdobeEditor.Views.Pages
             else
             {
                 MainWindow.Instance.ChangeVisibility(true);
-                MainWindow.Instance.Navigate(Components.Enums.Page.VersionSelector);
+                MainWindow.Instance.Navigate(Components.Enums.PageEnum.VersionSelector);
             }
         }
         private void openCreateLink(object sender, RoutedEventArgs e)
@@ -159,7 +159,7 @@ namespace UnitedAdobeEditor.Views.Pages
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            MainWindow.Instance.Navigate(Components.Enums.Page.CreateConfig);
+            MainWindow.Instance.Navigate(Components.Enums.PageEnum.CreateConfig);
         }
 
         private async void shareConfig(object sender, RoutedEventArgs e)
@@ -177,13 +177,13 @@ namespace UnitedAdobeEditor.Views.Pages
                     return;
                 }
             }
-            MainWindow.Instance.Navigate(Components.Enums.Page.ShareConfigPage);
+            MainWindow.Instance.Navigate(Components.Enums.PageEnum.ShareConfigPage);
         }
 
         private void exploreConfigs(object sender, RoutedEventArgs e)
         {
 
-            MainWindow.Instance.Navigate(Components.Enums.Page.ExploreConfigs);
+            MainWindow.Instance.Navigate(Components.Enums.PageEnum.ExploreConfigs);
         }
     }
 }

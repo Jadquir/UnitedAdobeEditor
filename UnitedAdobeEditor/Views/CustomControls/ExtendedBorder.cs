@@ -34,7 +34,7 @@ namespace UnitedAdobeEditor.Views.CustomControls
             DependencyProperty.Register("EnableChangeBgColor", typeof(bool), typeof(ExtendedBorder), new PropertyMetadata(true));
 
 
-        bool isDarkMode => Wpf.Ui.Appearance.Theme.GetAppTheme() == Wpf.Ui.Appearance.ThemeType.Dark;
+        bool isDarkMode => Wpf.Ui.Appearance.ApplicationThemeManager.GetAppTheme() == Wpf.Ui.Appearance.ApplicationTheme.Dark;
         public void ChangeColor(bool isOver, bool isMouseDown)
         {
             if (!EnableChangeBgColor) return;

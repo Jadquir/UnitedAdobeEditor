@@ -1,4 +1,4 @@
-﻿<ui:UiPage
+﻿<Page
     x:Class="UnitedAdobeEditor.Views.Pages.ColorChanger"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -11,7 +11,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     FontFamily="Montserrat"
-    Style="{StaticResource UiPage}"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
 
     <Grid>
@@ -20,7 +20,13 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Stretch"
             Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Center" FontSize="17">Please select a color</TextBlock>
+            <ui:TextBlock
+                VerticalAlignment="Top"
+                FontSize="16"
+                FontWeight="SemiBold"
+                TextAlignment="Center">
+                Please select a color.
+            </ui:TextBlock>
             <customcontrols:ExtendedBorder
                 x:Name="mainColorHolder"
                 Width="120"
@@ -43,16 +49,23 @@
                     x:Name="advancedEditButton"
                     Click="advancedEditButton_Click"
                     Cursor="Hand"
-                    Icon="Edit16">
+                    Icon="{ui:SymbolIcon Edit16}">
                     Edit
                 </ui:Button>
             </StackPanel>
             <StackPanel Margin="0,25,0,0" Orientation="Vertical">
-                <TextBlock HorizontalAlignment="Center" FontSize="17">Select your Photoshop Theme</TextBlock>
+
+                <ui:TextBlock
+                    VerticalAlignment="Top"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    TextAlignment="Center">
+                    Select your Photoshop Theme
+                </ui:TextBlock>
                 <ComboBox x:Name="photoshopThemeComboBox" Margin="30,10,30,0" />
             </StackPanel>
             <Grid
-                Margin="0,35,0,0"
+                Margin="20,20,0,35"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom">
                 <Grid.ColumnDefinitions>
@@ -62,25 +75,29 @@
                 <ui:Button
                     x:Name="applyButton"
                     Grid.Column="0"
+                    Width="190"
+                    Padding="50,10"
                     HorizontalAlignment="Right"
+                    Appearance="Primary"
                     Click="applyButton_Click"
+                    Content="Apply"
+                    CornerRadius="18,0,0,18"
                     Cursor="Hand"
-                    Icon="Save24">
-                    Apply
-                </ui:Button>
+                    Icon="{ui:SymbolIcon Save24}" />
                 <ui:Button
                     x:Name="restoreButton"
                     Grid.Column="1"
-                    Margin="20,0,0,0"
+                    Width="190"
+                    Padding="20,10"
                     HorizontalAlignment="Left"
                     Click="restoreButton_Click"
+                    Content="Return to Original"
+                    CornerRadius="0,18,18,0"
                     Cursor="Hand"
-                    Icon="ArrowCounterclockwise12">
-                    Return to Original
-                </ui:Button>
+                    Icon="{ui:SymbolIcon ArrowCounterclockwise12}" />
             </Grid>
 
         </StackPanel>
     </Grid>
 
-</ui:UiPage>
+</Page>

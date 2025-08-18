@@ -1,4 +1,5 @@
-﻿using Color = System.Windows.Media.Color;
+﻿using JadColorPicker;
+using Color = System.Windows.Media.Color;
 
 namespace UnitedAdobeEditor.Components
 {
@@ -10,9 +11,7 @@ namespace UnitedAdobeEditor.Components
             dialog.Owner = MainWindow.Instance;
             dialog.ContentRendered += (s, e) =>
             {
-                Wpf.Ui.Appearance.Background.Apply(dialog, Wpf.Ui.Appearance.Background.IsSupported(Wpf.Ui.Appearance.BackgroundType.Mica)
-               ? Wpf.Ui.Appearance.BackgroundType.Mica :
-               Wpf.Ui.Appearance.BackgroundType.None);
+                ColorDialog.ApplyBackground(dialog);
             };
            
             dialog.ShowDialog();

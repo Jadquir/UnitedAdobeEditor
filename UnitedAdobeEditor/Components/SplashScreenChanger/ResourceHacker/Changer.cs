@@ -8,11 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Xps.Packaging;
 using UnitedAdobeEditor.Components.Classes;
 using UnitedAdobeEditor.Components.Classes.SplashScreenData;
 using UnitedAdobeEditor.Components.Helpers;
 using Vestris.ResourceLib;
 using static UnitedAdobeEditor.Components.Classes.SplashScreenData.Main;
+using static UnitedAdobeEditor.Views.Pages.SplashScreenChanger;
 using ThreadState = System.Threading.ThreadState;
 
 namespace UnitedAdobeEditor.Components.SplashScreenChanger.ResourceHacker
@@ -105,12 +107,12 @@ namespace UnitedAdobeEditor.Components.SplashScreenChanger.ResourceHacker
 
         private static string sender = "ResourceChanger";
 
-        public static async void Change(Image image)
+        public static async void Change(Image image, ReplaceType replaceType)
         {
             await Misc.RunBackground((s,e)=> {
                 try
                 {
-                    ChangeFunc(image); 
+                    ChangeFunc(image ,replaceType); 
                 }
                 catch (Exception ex)
                 {
@@ -120,7 +122,7 @@ namespace UnitedAdobeEditor.Components.SplashScreenChanger.ResourceHacker
 
             });
         }
-        public static async void ChangeFunc(Image image)
+        public static async void ChangeFunc(Image image, ReplaceType replaceType)
         {
             AdobeApp? app = Get(CurrentOperation.AppType);
             if (app == null)
@@ -151,21 +153,41 @@ namespace UnitedAdobeEditor.Components.SplashScreenChanger.ResourceHacker
                     var id = vi.ResourceTypes.Find(x => x.Name == ((ResourceImageData)resourceData[0]).Parent);
 
                     // Get all the resource files from the parent if the name matches
-                    var list = vi.Resources[id].FindAll(x => resourceData.Any(y => ((ResourceImageData)y).PossibleNames.Contains(x.Name.Name)));
+                    var list = vi.Resources[id].FindAll(x => resourceData.Any(y => ((ResourceImageData)y).PossibleNames.ContainsName(x.Name.Name)));
 
                     foreach (GenericResource resource in list)
                     {
-                        var data = resourceData.Find(x => ((ResourceImageData)x).PossibleNames.Contains(resource.Name.Name));
+                        var data = resourceData.Find(x =>
+                        {
+                            var data = ((ResourceImageData)x);
+                            var list = app.HasDarkVariant ? replaceType switch
+                            {
+                                ReplaceType.Both => data.PossibleNames,
+                                ReplaceType.Dark => data.DarkVariantNames,
+                                ReplaceType.Light => data.LightVariantNames,
+                                _ => []
+                            } : data.PossibleNames;
+                            return list.ContainsName(resource.Name.Name);
+                        });
                         if (data == null)
                         {
                             Debug.WriteLine("ResourceName : " + resource.Name.Name);
                             continue;
                         }
-
                         Debug.WriteLine("Changing " + resource.Name.Name);
-                        resource.Data = image.ResizeImage(data.ImageSize).ToByteArray();
 
+                        var currentImage = resource.Data.ToImage();
+
+                        // Use helper to handle resizing and padding
+                        using var newImage = Extensions.PrepareReplacementImage(
+                            image,          // replacement image
+                            data.ImageSize,  // nominal target size
+                            currentImage     // original image from resource
+                        );
+
+                        resource.Data = newImage.ToByteArray();
                         value.Add(resource);
+
                     }
                 }
             }
@@ -193,6 +215,69 @@ namespace UnitedAdobeEditor.Components.SplashScreenChanger.ResourceHacker
 
             Misc.SetStatePleaseWait();
             MessageBoxJ.ShowOK("Successfully changed the Splash Screen.");
+        }
+
+        internal static Image? GetImage(bool requireHighResolution = false, bool isDarkMode = false)
+        {
+            AdobeApp? app = Get(CurrentOperation.AppType);
+            if (app == null)
+            {
+                return null;
+            }
+            List<ImageDataBase> resourceData = app.ResourceData;
+
+            try
+            {
+                using (ResourceInfo vi = new ResourceInfo())
+                {
+                    vi.Load(CurrentOperation.SelectedPath.EXEFilePath);
+
+                    // Find all the parent folder inside the resource
+                    var id = vi.ResourceTypes.Find(x => x.Name == ((ResourceImageData)resourceData[0]).Parent);
+
+                    // Get all the resource files from the parent if the name matches
+                    var list = vi.Resources[id].FindAll(x => resourceData.Any(y => ((ResourceImageData)y).PossibleNames.ContainsName(x.Name.Name)));
+
+                    GenericResource? maxSizeSource = null;
+                    foreach (GenericResource resource in list)
+                    {
+
+                        var data = resourceData.Find(x =>
+                        {
+                            var data = ((ResourceImageData)x);
+                            var list = (app.HasDarkVariant && isDarkMode ? data.DarkVariantNames : data.LightVariantNames);
+                            if (list.Any())
+                            {
+                                return list.ContainsName(resource.Name.Name);
+                            }
+                            return data.PossibleNames.ContainsName(resource.Name.Name);
+                        });
+                        if (data == null)
+                        {
+                            continue;
+                        }
+                        if (!requireHighResolution)
+                        {
+                            return resource.Data.ToImage();
+                        }
+
+                        if (maxSizeSource == null) maxSizeSource = resource;
+                        else if (maxSizeSource.Size <= resource.Size)
+                        {
+                            maxSizeSource = resource;
+                        }
+                    }
+
+                    if(maxSizeSource != null)
+                    {
+                        return maxSizeSource.Data.ToImage();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return null;
         }
     }
 }

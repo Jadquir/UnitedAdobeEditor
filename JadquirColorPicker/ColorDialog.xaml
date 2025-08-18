@@ -1,4 +1,4 @@
-﻿<ui:UiWindow
+﻿<ui:FluentWindow
     x:Class="JadColorPicker.ColorDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -28,8 +28,7 @@
             ShowHelp="False"
             ShowMaximize="False"
             ShowMinimize="False"
-            UseLayoutRounding="True"
-            UseSnapLayout="True" />
+            UseLayoutRounding="True" />
         <local:ColorPicker
             x:Name="colorPicker"
             Grid.Row="1"
@@ -52,4 +51,4 @@
                 Cursor="Hand" />
         </StackPanel>
     </Grid>
-</ui:UiWindow>
+</ui:FluentWindow>

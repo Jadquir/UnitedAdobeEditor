@@ -1,4 +1,4 @@
-﻿<ui:UiPage
+﻿<Page
     x:Class="UnitedAdobeEditor.Views.Pages.SplashScreenChanger"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -13,10 +13,10 @@
     d:DesignWidth="800"
     FontFamily="Montserrat"
     FontSize="15"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     ScrollViewer.CanContentScroll="True"
     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
     ScrollViewer.VerticalScrollBarVisibility="Visible"
-    Style="{StaticResource UiPageScrollable}"
     mc:Ignorable="d">
 
     <Grid>
@@ -139,16 +139,83 @@
                     Content="Don't you have a custom splash screen? Create one easily."
                     NavigateUri="{Binding Instance.CreateSplashScreenLink, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UnitedAdobeEditor:MainWindow}}}" />
             </local1:ExtendedBorder>-->
-            <local1:ImageSelector x:Name="imageSelector" />
+
+
+            <StackPanel
+                x:Name="darkModeAlternativePanel"
+                Grid.Row="1"
+                HorizontalAlignment="Center">
+                <Border
+                    Height="1"
+                    Margin="50,15"
+                    Background="Transparent"
+                    Opacity=".2" />
+                <TextBlock
+                    Margin="0,0,0,5"
+                    HorizontalAlignment="Center"
+                    FontSize="17"
+                    FontWeight="SemiBold">
+                    Choose Splash Screen Replacement Mode
+                </TextBlock>
+
+                <TextBlock
+                    Margin="0,5,0,15"
+                    HorizontalAlignment="Center"
+                    FontSize="12"
+                    Foreground="Gray"
+                    Text="Some Adobe apps have separate dark and light splash screens. Pick how you want them replaced."
+                    TextAlignment="Center" />
+
+                <ComboBox
+                    x:Name="darkModeAlternativeSelect"
+                    Width="370"
+                    Cursor="Hand"
+                    SelectedIndex="0"
+                    SelectionChanged="darkModeAlternativeSelect_SelectionChanged">
+                    <ComboBoxItem>Replace Both Dark and Light Splash Screens</ComboBoxItem>
+                    <ComboBoxItem>Replace Only Dark Splash Screen</ComboBoxItem>
+                    <ComboBoxItem>Replace Only Light Splash Screen</ComboBoxItem>
+                </ComboBox>
+
+                <Border
+                    Height="1"
+                    Margin="50,15,0,0"
+                    Background="White"
+                    Opacity=".2" />
+            </StackPanel>
+
+            <StackPanel>
+
+                <TextBlock
+                    Margin="0,20,0,15"
+                    HorizontalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="SemiBold">
+                    Choose Your Custom Splash Screen
+                </TextBlock>
+
+                <local1:ImageSelector x:Name="imageSelector" />
+            </StackPanel>
+
+
+            <TextBlock
+                x:Name="colorboxesText"
+                Margin="0,20,0,0"
+                HorizontalAlignment="Center"
+                FontSize="16"
+                FontWeight="SemiBold">
+                Choose the custom colors
+            </TextBlock>
             <StackPanel
                 x:Name="colorboxes"
-                Margin="0,15,0,0"
+                Margin="0,0,0,0"
                 HorizontalAlignment="Center"
                 Cursor="Hand"
                 Orientation="Horizontal"
                 Visibility="Collapsed" />
+
             <Grid
-                Margin="0,15,0,35"
+                Margin="20,20,0,35"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom">
                 <Grid.ColumnDefinitions>
@@ -158,24 +225,30 @@
                 <ui:Button
                     x:Name="applyButton"
                     Grid.Column="0"
+                    Width="190"
+                    Padding="50,10"
                     HorizontalAlignment="Right"
+                    Appearance="Primary"
                     Click="applyButton_Click"
                     Content="Apply"
+                    CornerRadius="18,0,0,18"
                     Cursor="Hand"
-                    Icon="Save24" />
+                    Icon="{ui:SymbolIcon Save24}" />
                 <ui:Button
                     x:Name="restoreButton"
                     Grid.Column="1"
-                    Margin="20,0,0,0"
+                    Width="190"
+                    Padding="20,10"
                     HorizontalAlignment="Left"
                     Click="restoreButton_Click"
                     Content="Return to Original"
+                    CornerRadius="0,18,18,0"
                     Cursor="Hand"
-                    Icon="ArrowCounterclockwise12" />
+                    Icon="{ui:SymbolIcon ArrowCounterclockwise12}" />
             </Grid>
 
         </StackPanel>
 
 
     </Grid>
-</ui:UiPage>
+</Page>

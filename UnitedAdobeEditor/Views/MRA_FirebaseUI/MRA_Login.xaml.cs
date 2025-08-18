@@ -24,7 +24,7 @@ namespace MRA_WPF.Views.Windows.MRA_FirebaseUI
     /// <summary>
     /// MRA_Login.xaml etkileşim mantığı
     /// </summary>
-    public partial class MRA_Login : UiWindow
+    public partial class MRA_Login : FluentWindow
     {
         private readonly Register register;
         private readonly Login login;

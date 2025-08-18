@@ -1,4 +1,4 @@
-﻿<ui:UiPage
+﻿<Page
     x:Class="UnitedAdobeEditor.Views.Pages.MainMenu"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,80 +7,127 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="MainMenu"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="600"
+    d:DesignWidth="1000"
     FontFamily="Montserrat"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
 
+    <ui:DynamicScrollViewer VirtualizingPanel.ScrollUnit="Item">
+        <Grid>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <StackPanel
-            Grid.Row="0"
-            Margin="0,10,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top">
-            <StackPanel Margin="0,15,0,15" HorizontalAlignment="Center">
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <ui:Button
-                        Margin="0,0,10,0"
-                        Click="openCreateLink"
-                        Cursor="Hand"
-                        Icon="Add24">
-                        Create Splash Screen
-                    </ui:Button>
-                    <ui:Button
-                        Margin="0,0,10,0"
-                        Click="Button_Click"
-                        Cursor="Hand"
-                        Icon="Add24">
-                        Create UAE Config
-                    </ui:Button>
-                    <ui:Button
-                        Margin="0,0,10,0"
-                        Click="LoadConfig"
-                        Cursor="Hand"
-                        Icon="Folder28">
-                        Load UAE Config
-                    </ui:Button>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <!--  Action Buttons  -->
+                <RowDefinition Height="*" />
+                <!--  Main Content  -->
+            </Grid.RowDefinitions>
+            <!--  Action Buttons  -->
+            <Border Grid.Row="0">
+                <StackPanel>
+                    <StackPanel
+                        x:Name="ActionButtonsPanel"
+                        Margin="0,0,0,5"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <ui:Button
+                            x:Name="firstButton"
+                            Width="200"
+                            Height="35"
+                            Appearance="Primary"
+                            BorderThickness="0"
+                            Click="openCreateLink"
+                            CornerRadius="15,0,0,15"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon Add24}">
+                            Create Splash Screen
+                        </ui:Button>
+
+                        <ui:Button
+                            Width="180"
+                            Height="35"
+                            HorizontalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            Appearance="Primary"
+                            BorderThickness="0"
+                            Click="Button_Click"
+                            CornerRadius="0,20,20,0"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon Add24}">
+                            Create UAE Config
+                        </ui:Button>
+
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <ui:Button
+                            Width="180"
+                            Height="35"
+                            Appearance="Secondary"
+                            BorderThickness="0"
+                            Click="LoadConfig"
+                            CornerRadius="20,0,0,20"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon Folder28}">
+                            Load UAE Config
+                        </ui:Button>
+
+                        <ui:Button
+                            Width="180"
+                            Height="35"
+                            Appearance="Secondary"
+                            BorderThickness="0"
+                            Click="shareConfig"
+                            CornerRadius="0"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon Share24}">
+                            Share Configs
+                        </ui:Button>
+
+                        <ui:Button
+                            x:Name="lastButton"
+                            Width="180"
+                            Height="35"
+                            Appearance="Secondary"
+                            BorderThickness="0"
+                            Click="exploreConfigs"
+                            CornerRadius="0,20,20,0"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon Search24}">
+                            Explore Configs
+                        </ui:Button>
+                    </StackPanel>
                 </StackPanel>
+            </Border>
 
-                <StackPanel
-                    Margin="0,10,0,0"
+            <Border
+                Grid.Row="1"
+                Height="2"
+                Margin="150,15"
+                Background="White"
+                Opacity=".1" />
+            <!--  Main Content  -->
+            <StackPanel Grid.Row="2">
+                <TextBlock
+                    Margin="0,0,0,15"
                     HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <ui:Button
-                        Margin="0,0,10,0"
-                        Click="shareConfig"
-                        Cursor="Hand"
-                        Icon="Share24">
-                        Share Configs
-                    </ui:Button>
-                    <ui:Button
-                        Click="exploreConfigs"
-                        Cursor="Hand"
-                        Icon="Search24">
-                        Explore Configs
-                    </ui:Button>
-                </StackPanel>
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    TextAlignment="Center">
+                    Please select the Adobe application you want to make changes on.
+                </TextBlock>
 
+                <ui:VirtualizingItemsControl
+                    x:Name="list1"
+                    Margin="0,0,0,25"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Top"
+                    VirtualizingPanel.CacheLengthUnit="Pixel"
+                    VirtualizingPanel.IsContainerVirtualizable="True"
+                    VirtualizingPanel.IsVirtualizing="True"
+                    VirtualizingPanel.ScrollUnit="Pixel" />
             </StackPanel>
-            <TextBlock FontSize="15" TextAlignment="Center">
-                Please select the Adobe application you want to make changes on.
-            </TextBlock>
-        </StackPanel>
-        <ui:VirtualizingItemsControl
-            x:Name="list1"
-            Grid.Row="1"
-            Margin="0,0,0,25"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Top"
-            VirtualizingPanel.CacheLengthUnit="Pixel"
-            VirtualizingPanel.IsContainerVirtualizable="True"
-            VirtualizingPanel.IsVirtualizing="True"
-            VirtualizingPanel.ScrollUnit="Pixel" />
-    </Grid>
-</ui:UiPage>
+        </Grid>
+    </ui:DynamicScrollViewer>
+</Page>

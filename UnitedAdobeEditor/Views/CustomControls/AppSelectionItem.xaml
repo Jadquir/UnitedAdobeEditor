@@ -6,18 +6,21 @@
     xmlns:local="clr-namespace:UnitedAdobeEditor.Views.CustomControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     HorizontalAlignment="Stretch"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
     <Border>
         <StackPanel Orientation="Horizontal">
             <Image
                 x:Name="icon"
-                Width="20"
-                Height="20"
+                Width="30"
+                Height="30"
                 Margin="5,3,10,3" />
             <TextBlock
                 x:Name="appName"
                 Margin="0,0,10,0"
-                VerticalAlignment="Center">
+                VerticalAlignment="Center"
+                FontWeight="Regular"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}">
                 Photoshop
             </TextBlock>
         </StackPanel>

@@ -73,7 +73,7 @@ namespace UnitedAdobeEditor.Views.CustomControls
         private void Copy_click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(config.url); 
-            MainWindow.Instance.ShowSnackBar("Copied shareable link!", "Copied!", icon: Wpf.Ui.Common.SymbolRegular.Share16);
+            MainWindow.Instance.ShowSnackBar("Copied!", "Copied shareable link!",  icon: SymbolRegular.Share16);
         }
 
         private void DownloadConfigClick(object sender, RoutedEventArgs e)

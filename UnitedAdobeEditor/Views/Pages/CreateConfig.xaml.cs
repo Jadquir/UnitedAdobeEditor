@@ -26,7 +26,7 @@ namespace UnitedAdobeEditor.Views.Pages
     /// <summary>
     /// CreateConfig.xaml etkileşim mantığı
     /// </summary>
-    public partial class CreateConfig : UiPage
+    public partial class CreateConfig : Page
     {
         public CreateConfig()
         {

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using UnitedAdobeEditor.Components;
 using UnitedAdobeEditor.Components.ColorChanger;
 using UnitedAdobeEditor.Components.Enums;
-using Wpf.Ui.Controls;
 using Color = System.Windows.Media.Color;
 
 namespace UnitedAdobeEditor.Views.Pages
@@ -13,7 +14,7 @@ namespace UnitedAdobeEditor.Views.Pages
     /// <summary>
     /// ColorChanger.xaml etkileşim mantığı
     /// </summary>
-    public partial class ColorChanger : UiPage
+    public partial class ColorChanger : Page
     {
         private Color MainColor;
         public ColorChanger()
@@ -50,7 +51,7 @@ namespace UnitedAdobeEditor.Views.Pages
 
         private void advancedEditButton_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.Navigate(Components.Enums.Page.AdvancedColors);
+            MainWindow.Instance.Navigate(Components.Enums.PageEnum.AdvancedColors);
         }
 
         private void SaveSettings()
@@ -74,11 +75,27 @@ namespace UnitedAdobeEditor.Views.Pages
             (bool, string) restore = Components.ColorChanger.ColorChanger.Restore();
             if (!restore.Item1)
             {
-                MainWindow.Instance.ShowSnackBar("Error", restore.Item2, Wpf.Ui.Common.ControlAppearance.Danger, Wpf.Ui.Common.SymbolRegular.ErrorCircle24);
+                MainWindow.Instance.ShowSnackBar("Error", restore.Item2, 
+                    appearance: Wpf.Ui.Controls.ControlAppearance.Danger, icon: Wpf.Ui.Controls.SymbolRegular.ErrorCircle24);
                 return;
             }
             MessageBoxJ.ShowOK(restore.Item2);
             
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Components.ColorChanger.ColorChanger.Restore();
+            Components.ColorChanger.ColorChanger.Null();
+            var theme = PhotoshopTheme.ClaudeAITheme;
+            //for (int i = 0; i < theme.Count; i++)
+            //{
+            //    var item = theme.ElementAt(i);
+            //    Components.ColorChanger.ColorChanger.ChangeInUIColors(item.Key, new ColorHolder(item.Key, item.Value.ToColor(), (float)item.Value.A));
+            //}
+            //Components.ColorChanger.ColorChanger.SaveUIColors();
+
+
         }
     }
 }

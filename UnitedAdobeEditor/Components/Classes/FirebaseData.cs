@@ -31,7 +31,7 @@ namespace UnitedAdobeEditor.Components.Classes
             }
         }
 
-        protected override string GetEncrptionKey() => "<Encryption Key>";
+        protected override string GetEncrptionKey() => App.UserSaveEncryptionKey;
 
         protected override string GetSaveFilePath() => Files.FirebaseUserPath;
 

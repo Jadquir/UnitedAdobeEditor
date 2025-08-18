@@ -25,27 +25,62 @@ namespace UnitedAdobeEditor.Views.CustomControls
     /// </summary>
     public partial class ImageSelector : UserControl
     {
+        static BitmapImage? defaultImage;
         public System.Drawing.Image? SelectedImage { get; private set; }
+        public System.Drawing.Image? previewImage { get; private set; }
         public ImageSelector()
         {
             InitializeComponent();
             imageHolder.OnClick += OnClick;
+            saveCurrentImageBorder.Visibility = (ExportDefaultImage != null).VisibleIfTrue();
+
+            if (defaultImage == null) {
+
+                // The URI string
+                string uriString = "pack://application:,,,/Images/SplashScreenImport.png";
+
+                // Create a BitmapImage from the URI
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(uriString, UriKind.Absolute);
+                bitmap.EndInit();
+
+                defaultImage = bitmap;
+            }
+
+        }
+        void SetImage(BitmapSource? image)
+        {
+            this.image.Source = (image ?? defaultImage);
+        }
+        void UpdateImage()
+        {
+            SetImage((SelectedImage ?? previewImage).ConvertToBitmapSource());
+
+            saveCurrentImageBorder.Visibility = (previewImage != null).VisibleIfTrue();
         }
         public static string CreateSplashScreenLink => App.CreateSplashScreenLink;
+
+        public Action? ExportDefaultImage { get; internal set; }
+
         public void SetSelectedImage(System.Drawing.Image image)
         {
             Dispatcher.Invoke(() =>
             {
                 SelectedImage = image;
-                try
-                {
-
-                    this.image.Source = Misc.ConvertDrawingImageToBitmapImage(SelectedImage);
-                }
-                catch (Exception)
-                {
-
-                }
+                UpdateImage();
+            });
+        }
+        private void SaveCurrentImageClick(object sender, RoutedEventArgs e)
+        {
+            ExportDefaultImage?.Invoke();
+        }
+        public void SetPreviewImage(System.Drawing.Image? image)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                previewImage = image;
+                UpdateImage();
             });
         }
         private async void OnClick(object? sender, EventArgs e)
@@ -64,11 +99,21 @@ namespace UnitedAdobeEditor.Views.CustomControls
             if (@bool.HasValue && @bool.Value)
             {
                 System.Drawing.Image image = System.Drawing.Image.FromFile(dialog.FileName);
-                if (image.Size != new System.Drawing.Size(1500, 1000))
+
+                const float defaultAspect = 15 / 10; 
+                const float epsilon = 0.01f;
+
+                var imageAspectRatio = image.Size.Width / image.Size.Height;
+                if (Math.Abs(imageAspectRatio - defaultAspect) >= epsilon)
                 {
                     bool continueSelecting = false;
-                    await MessageBoxJ.ShowYesNo("The selected image is not 1500x1000.\nImage may be distorted.\nDo you want to continue?",
-                        (s, e) => { continueSelecting = true; });
+                    await MessageBoxJ.ShowYesNo(
+                        $"The selected image does not match the recommended aspect ratio of {defaultAspect} (1500×1000).\n" +
+                        "Using this image may cause distortion.\n" +
+                        "Do you want to continue anyway?",
+                        (s, e) => { continueSelecting = true; }
+                    );
+
                     if (!continueSelecting)
                     {
                         return;
@@ -82,7 +127,8 @@ namespace UnitedAdobeEditor.Views.CustomControls
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.Navigate(Components.Enums.Page.ExploreConfigs);
+            MainWindow.Instance.Navigate(Components.Enums.PageEnum.ExploreConfigs);
         }
+
     }
 }

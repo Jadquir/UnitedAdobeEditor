@@ -19,7 +19,7 @@ namespace UnitedAdobeEditor.Views.Pages
     /// <summary>
     /// Loading.xaml etkileşim mantığı
     /// </summary>
-    public partial class Loading : UiPage
+    public partial class Loading : Page
     {
         public static Loading Instance;
         public Loading()

@@ -11,8 +11,8 @@ namespace UnitedAdobeEditor.Components.Firebase
 {
     public class FirebaseAuthControl
     {
-        public const string ApiKey = "<Api Key>";
-        public const string AuthDomain = "<Auth Domain>";
+       // public const string ApiKey = "<Api Key>";
+       // public const string AuthDomain = "<Auth Domain>";
 
         private FirebaseAuthClient _client;
 
@@ -25,8 +25,8 @@ namespace UnitedAdobeEditor.Components.Firebase
             p_instance = this;
             var config = new FirebaseAuthConfig
             {
-                ApiKey = FirebaseAuthControl.ApiKey,
-                AuthDomain = FirebaseAuthControl.AuthDomain,
+                ApiKey = App.FirebaseApiKey,
+                AuthDomain = App.FirebaseAuthDomain,
                 Providers = new FirebaseAuthProvider[]
                 {
                     new EmailProvider()

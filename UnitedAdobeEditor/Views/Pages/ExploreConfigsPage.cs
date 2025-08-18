@@ -72,17 +72,10 @@ namespace UnitedAdobeEditor.Views.Pages
         private Grid grid;
 
         protected bool EnableLoading = true;
+        const string defaultMessage = "Sorry :( It seems there is no match for this search";
         public ExploreConfigsPage()
         {
-            //EmptyTextBlock = new TextBlock()
-            //{
-            //    Text = "Sorry :(. It seems there is no match for this search",
-            //    Margin = new Thickness(0, 0, 10, 0),
-            //    VerticalAlignment = VerticalAlignment.Center,
-            //    HorizontalAlignment = HorizontalAlignment.Center,
-            //    Foreground = new SolidColorBrush(Colors.AliceBlue)
-            //};
-            SetEmptyText("Sorry :( It seems there is no match for this search");
+            SetEmptyText(defaultMessage);
             pagination = new Pagination();
             pagination.nextPage = 1;
 
@@ -149,7 +142,14 @@ namespace UnitedAdobeEditor.Views.Pages
             buttonHolder.Children.Clear();
             // Add the "Previous" button
             var previousButton = Create("<");
-            previousButton.Click += (sender, e) => GoToPreviousPage();
+            if (CanGoBack)
+            {
+                previousButton.Click += (sender, e) => GoToPreviousPage();
+            }
+            else
+            {
+                previousButton.IsEnabled = false;
+            }
             buttonHolder.Children.Add(previousButton);
 
             // Generate buttons from (currentPage - buttonsToShow) to (currentPage + buttonsToShow)
@@ -162,7 +162,7 @@ namespace UnitedAdobeEditor.Views.Pages
                     bool isCurrentActive = page == Math.Max((pagination.currentPage), 1);
                     Wpf.Ui.Controls.Button button = Create(page.ToString());
                     button.Appearance =
-                       isCurrentActive ? Wpf.Ui.Common.ControlAppearance.Primary : Wpf.Ui.Common.ControlAppearance.Secondary;
+                       isCurrentActive ? ControlAppearance.Primary : ControlAppearance.Secondary;
                     if (!isCurrentActive)
                         button.Click += (sender, e) => GoToPage(page);
                     else
@@ -175,7 +175,14 @@ namespace UnitedAdobeEditor.Views.Pages
 
             // Add the "Next" button
             Wpf.Ui.Controls.Button nextButton = Create(">");
-            nextButton.Click += (sender, e) => GoToNextPage();
+            if (CanGoForward)
+            {
+                nextButton.Click += (sender, e) => GoToNextPage();
+            }
+            else
+            {
+                nextButton.IsEnabled = false;
+            }
             buttonHolder.Children.Add(nextButton);
         }
         private void GoToPage(int pageNumber)
@@ -184,22 +191,23 @@ namespace UnitedAdobeEditor.Views.Pages
             _ = Reload();
         }
 
+        bool CanGoBack => (pagination.currentPage - 1) >= 1;
+        bool CanGoForward => (pagination.currentPage + 1 <= pagination.max_page);
         private void GoToPreviousPage()
         {
-            var page = pagination.currentPage-1;
-            if (page > 1)
+            if (CanGoBack)
             {
-                pagination.nextPage = page;
+                pagination.nextPage = pagination.currentPage - 1;
                 _ = Reload();
             }
         }
 
         private void GoToNextPage()
         {
-            if (pagination.currentPage + 1 < pagination.max_page)
+            if (CanGoForward)
             {
                 var page = pagination.currentPage+1;
-                pagination.nextPage = pagination.currentPage;
+                pagination.nextPage = page;
                 _ = Reload();
             }
         }
@@ -259,6 +267,7 @@ namespace UnitedAdobeEditor.Views.Pages
         {
             Dispatcher.Invoke(() =>
             {
+                SetEmptyText(isEmpty ? defaultMessage : "");
                 NotifyListChanged();
                 GenerateButtons();
             });

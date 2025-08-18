@@ -28,21 +28,21 @@ namespace UnitedAdobeEditor.Views.CustomControls
         public AppSelector(AdobeType type)
         {
             InitializeComponent();
-            text1.Text = type.ToFriendlyString();
+            AppName.Text = type.ToFriendlyString();
 
             this.type = type;
 
             OnClick += (s, e) =>
             {
                 CurrentOperation.AppType = type;
-                MainWindow.Instance.Navigate(Components.Enums.Page.VersionSelector);
+                MainWindow.Instance.Navigate(Components.Enums.PageEnum.VersionSelector);
             };
             string? name = UnitedAdobeEditor.Components.Classes.SplashScreenData.Main.Get(type)?.LogoName;
            
             if (!String.IsNullOrWhiteSpace(name))
             {
                 string file = "Images/Logos/" + name;
-                image.ImageSource = Misc.ImageFromResource(file);
+                AppLogo.Source = Misc.ImageFromResource(file);
             }
 
         }

@@ -25,7 +25,7 @@ namespace UnitedAdobeEditor.Components
             var ok = "Ok";
             await ShowDialogFunc(content, "", ()=>true, ok, () => true, title, LeftPrimary, heightMultiplier, widthMultiplier);
         }
-        public static void Show(
+        public static async void Show(
             object message,
 
             string LeftButtonText = "OK",
@@ -40,25 +40,43 @@ namespace UnitedAdobeEditor.Components
         {
             Wpf.Ui.Controls.MessageBox mb = new Wpf.Ui.Controls.MessageBox();
 
-            mb.ButtonLeftName = LeftButtonText;
-            mb.ButtonRightName = RightButtonText;
+            mb.PrimaryButtonAppearance = LeftPrimary ? ControlAppearance.Primary : ControlAppearance.Secondary;
+            mb.SecondaryButtonAppearance = !LeftPrimary ? ControlAppearance.Primary : ControlAppearance.Secondary;
+        
+            mb.PrimaryButtonText = LeftButtonText;
+            mb.SecondaryButtonText = RightButtonText;
+
+            mb.IsSecondaryButtonEnabled = !string.IsNullOrEmpty(RightButtonText);
+            mb.IsPrimaryButtonEnabled = !string.IsNullOrEmpty(LeftButtonText);
+
             mb.Content = null;
-            mb.Content = message is string messagestr ? new TextBlock() { Text = messagestr } : message ;
+            mb.Content = message is string messagestr ? new Wpf.Ui.Controls.TextBlock() { Text = messagestr } : message ;
 
             title ??= App.Name;
             mb.Owner = owner ?? MainWindow.Instance;
             mb.Title = title;
 
-            LeftButtonClick += (s, e) => { mb.Close(); };
-            RightButtonClick += (s, e) => { mb.Close(); };
+            //LeftButtonClick += (s, e) => { mb.Close(); };
+            //RightButtonClick += (s, e) => { mb.Close(); };
+            mb.IsCloseButtonEnabled = !string.IsNullOrEmpty(RightButtonText);
 
-            mb.ButtonLeftClick += LeftButtonClick;
-            mb.ButtonRightClick += RightButtonClick;
-
-            mb.ButtonRightAppearance = LeftPrimary ? Wpf.Ui.Common.ControlAppearance.Secondary : Wpf.Ui.Common.ControlAppearance.Transparent;
-            mb.ButtonLeftAppearance = LeftPrimary ? Wpf.Ui.Common.ControlAppearance.Primary : Wpf.Ui.Common.ControlAppearance.Secondary;
-
-            mb.ShowDialog();
+            var result = await mb.ShowDialogAsync();
+            if(result == Wpf.Ui.Controls.MessageBoxResult.Primary && LeftPrimary)
+            {
+                LeftButtonClick?.Invoke(null, null);
+            }
+            else if(result == Wpf.Ui.Controls.MessageBoxResult.Secondary && LeftPrimary)
+            {
+                RightButtonClick?.Invoke(null, null);
+            }
+            else if (result == Wpf.Ui.Controls.MessageBoxResult.Primary && !LeftPrimary)
+            {
+                RightButtonClick?.Invoke(null, null);
+            }
+            else if (result == Wpf.Ui.Controls.MessageBoxResult.Secondary && !LeftPrimary)
+            {
+                LeftButtonClick?.Invoke(null, null);
+            }
         }
 
 
@@ -93,42 +111,15 @@ namespace UnitedAdobeEditor.Components
             string? title = null)
         {
             await MainWindow.Instance.Dispatcher.Invoke(async () => {
-                Dialog dialog = MainWindow.Instance.GetDialog();
-
-                dialog.ButtonLeftName = LeftButtonText;
-                if (String.IsNullOrEmpty(dialog.ButtonLeftName))
+                await ShowDialogFunc(message, LeftButtonText, () =>
                 {
-                    dialog.ButtonLeftVisibility = Visibility.Collapsed;
-                }
-                dialog.ButtonRightName = RightButtonText;
-                if (String.IsNullOrEmpty(dialog.ButtonRightName))
+                    LeftButtonClick?.Invoke(null, null);
+                    return true;
+                }, RightButtonText, () =>
                 {
-                    dialog.ButtonRightVisibility = Visibility.Collapsed;
-                }
-                dialog.Content = null; 
-                dialog.Message = "";
-                dialog.Message = message;
-
-
-                title ??= App.Name;
-                dialog.Title = title;
-
-                LeftButtonClick += (s, e) => { Debug.WriteLine("Left Click"); dialog.Hide(); };
-                RightButtonClick += (s, e) => { Debug.WriteLine("Right Click"); dialog.Hide(); };
-
-                if (Old1 != null) { dialog.ButtonLeftClick -= Old1; }
-                dialog.ButtonLeftClick += LeftButtonClick;
-
-                if (Old2 != null) { dialog.ButtonRightClick -= Old2; }
-                dialog.ButtonRightClick += RightButtonClick;
-
-                Old1 = LeftButtonClick;
-                Old2 = RightButtonClick;
-
-                dialog.ButtonRightAppearance = LeftPrimary ? Wpf.Ui.Common.ControlAppearance.Secondary : Wpf.Ui.Common.ControlAppearance.Primary;
-                dialog.ButtonLeftAppearance = LeftPrimary ? Wpf.Ui.Common.ControlAppearance.Primary : Wpf.Ui.Common.ControlAppearance.Secondary;
-
-                await dialog.ShowAndWaitAsync();
+                    RightButtonClick?.Invoke(null, null);
+                    return true;
+                }, title, LeftPrimary);
             });
             
         }
@@ -153,61 +144,104 @@ namespace UnitedAdobeEditor.Components
                 return;
             }
             //MusicRecognitionAPI.Log.Add($"SettingsPage.ShowConfirmation");
-            Wpf.Ui.Controls.Dialog mb = MainWindow.Instance.GetDialog();
-
-            mb.ButtonLeftName = LeftButtonText;
-            mb.ButtonRightName = RightButtonText;
-            mb.Content = null;
-            mb.Message = "";
-            mb.Content = content is string messagestr ? new TextBlock() { Text = messagestr } : content;
-            title ??= App.Name;
-            mb.Title = title;
-
-            mb.MinHeight = 200.0;
-            mb.MinWidth = 400.0;
-            mb.DialogWidth = mb.MinWidth + ((MainWindow.Instance.Width / 8.3) * widthMultiplier);
-            mb.DialogHeight = mb.MinHeight + ((MainWindow.Instance.Height / 11.3) * heightMultiplier);
-
-            if (LeftPrimary)
+            var service = MainWindow.Instance.GetDialog();
+            var contentDialog = new ContentDialog();
+            if (content is string str)
             {
-                mb.ButtonRightAppearance = Wpf.Ui.Common.ControlAppearance.Secondary;
-                mb.ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Primary;
+                contentDialog.Content = new Wpf.Ui.Controls.TextBlock()
+                {
+                    Text = str,
+                    MinWidth = 350,
+                    TextWrapping = TextWrapping.WrapWithOverflow,
+                };
             }
             else
             {
-                mb.ButtonRightAppearance = Wpf.Ui.Common.ControlAppearance.Primary;
-                mb.ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Secondary;
+                contentDialog.Content = content;
             }
+            title ??= App.Name;
+            contentDialog.Title = title;
+            contentDialog.PrimaryButtonAppearance = LeftPrimary ? ControlAppearance.Primary : ControlAppearance.Secondary;
+            contentDialog.SecondaryButtonAppearance = !LeftPrimary ? ControlAppearance.Primary : ControlAppearance.Secondary;
+
+            contentDialog.PrimaryButtonText = LeftButtonText;
+            contentDialog.SecondaryButtonText = RightButtonText;
 
 
-            bool result = false;
-            while (!result)
+            contentDialog.IsSecondaryButtonEnabled = !string.IsNullOrEmpty(RightButtonText);
+            contentDialog.IsPrimaryButtonEnabled = !string.IsNullOrEmpty(LeftButtonText);
+
+            contentDialog.CloseButtonText = "Close";
+
+            contentDialog.MinHeight = 200.0;
+            contentDialog.MinWidth = 400.0;
+            if (contentDialog.Content is FrameworkElement element)
             {
-                mb.Hide();
-                var button = await mb.ShowAndWaitAsync();
-                if (LeftButtonClick is null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Left)
-                {
-                    mb.Hide();
-                    result = true;
-                }
-                else if (RightButtonClick is null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Right)
-                {
-                    mb.Hide();
-                    result = true;
-                }
-                else if (button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Left && LeftButtonClick != null)
+                contentDialog.DialogHeight = element.DesiredSize.Height;
+                contentDialog.DialogWidth = element.DesiredSize.Width * 1.2d;
+            }
+            bool result = false;
+            while (!(result))
+            {
+                var button = await service.ShowAsync(contentDialog, default);
+
+                bool? isLeft = null;
+                isLeft = button == ContentDialogResult.Primary ?
+                    LeftPrimary :
+                    (button == ContentDialogResult.Secondary ?
+                   !LeftPrimary :
+                    null);
+                if (isLeft == true && LeftButtonClick != null)
                 {
                     result = await LeftButtonClick;
-                    if (result)
-                        mb.Hide();
                 }
-                else if (RightButtonClick is not null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Right)
-                {
+                else if (isLeft == false && RightButtonClick != null)
                     result = await RightButtonClick;
-                    if (result)
-                        mb.Hide();
+
+                else
+                {
+                    result = true;
                 }
+                //if (button == ContentDialogResult.Primary)
+                //{
+                //    result = await DialogParameters.Invoke(parameters.Left);
+                //}
+                //else if (button == ContentDialogResult.Secondary)
+                //{
+                //    result = await DialogParameters.Invoke(parameters.Right);
+                //}
+                //else if (button == ContentDialogResult.None)
+                //{
+                //    result = true;
+                //}
             }
+            //while (!result)
+            //{
+            //    mb.Hide();
+            //    var button = await mb.ShowAndWaitAsync();
+            //    if (LeftButtonClick is null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Left)
+            //    {
+            //        mb.Hide();
+            //        result = true;
+            //    }
+            //    else if (RightButtonClick is null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Right)
+            //    {
+            //        mb.Hide();
+            //        result = true;
+            //    }
+            //    else if (button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Left && LeftButtonClick != null)
+            //    {
+            //        result = await LeftButtonClick;
+            //        if (result)
+            //            mb.Hide();
+            //    }
+            //    else if (RightButtonClick is not null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Right)
+            //    {
+            //        result = await RightButtonClick;
+            //        if (result)
+            //            mb.Hide();
+            //    }
+            //}
         }
         public static async Task ShowDialogFunc(
             object content,
@@ -228,63 +262,104 @@ namespace UnitedAdobeEditor.Components
                 return;
             }
             //MusicRecognitionAPI.Log.Add($"SettingsPage.ShowConfirmation");
-            Wpf.Ui.Controls.Dialog mb = MainWindow.Instance.GetDialog();
-
-            mb.ButtonLeftName = LeftButtonText;
-            mb.ButtonRightName = RightButtonText;
-            mb.ButtonLeftVisibility = string.IsNullOrEmpty(LeftButtonText) ? Visibility.Collapsed : Visibility.Visible;
-            mb.ButtonRightVisibility = string.IsNullOrEmpty(RightButtonText) ? Visibility.Collapsed : Visibility.Visible;
-
-            mb.Content = null;
-            mb.Message = "";
-            mb.Content = content is string messagestr ? new TextBlock() { Text = messagestr } : content;
-            title ??= App.Name;
-            mb.Title = title;
-
-            mb.MinHeight = 200.0;
-            mb.MinWidth = 400.0;
-            mb.DialogWidth = mb.MinWidth + ((MainWindow.Instance.Width / 8.3) * widthMultiplier);
-            mb.DialogHeight = mb.MinHeight + ((MainWindow.Instance.Height / 11.3) * heightMultiplier);
-
-            if (LeftPrimary)
+            var service = MainWindow.Instance.GetDialog();
+            var contentDialog = new ContentDialog();
+            if (content is string str)
             {
-                mb.ButtonRightAppearance = Wpf.Ui.Common.ControlAppearance.Secondary;
-                mb.ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Primary;
+                contentDialog.Content = new Wpf.Ui.Controls.TextBlock()
+                {
+                    Text = str,
+                    MinWidth = 350,
+                    TextWrapping = TextWrapping.WrapWithOverflow,
+                };
             }
             else
             {
-                mb.ButtonRightAppearance = Wpf.Ui.Common.ControlAppearance.Primary;
-                mb.ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Secondary;
+                contentDialog.Content = content;
             }
+            title ??= App.Name;
+            contentDialog.Title = title;
+            contentDialog.PrimaryButtonAppearance = LeftPrimary ? ControlAppearance.Primary : ControlAppearance.Secondary;
+            contentDialog.SecondaryButtonAppearance = !LeftPrimary ? ControlAppearance.Primary : ControlAppearance.Secondary;
 
-            bool result = false;
-            while (!result)
+            contentDialog.PrimaryButtonText = LeftButtonText;
+            contentDialog.SecondaryButtonText = RightButtonText;
+
+
+            contentDialog.IsSecondaryButtonEnabled = !string.IsNullOrEmpty(RightButtonText);
+            contentDialog.IsPrimaryButtonEnabled = !string.IsNullOrEmpty(LeftButtonText);
+
+            contentDialog.CloseButtonText = "Close";
+
+            contentDialog.MinHeight = 200.0;
+            contentDialog.MinWidth = 400.0;
+            if (contentDialog.Content is FrameworkElement element)
             {
-                mb.Hide();
-                var button = await mb.ShowAndWaitAsync();
-                if (LeftButtonClick is null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Left)
-                {
-                    mb.Hide();
-                    result = true;
-                }
-                else if (RightButtonClick is null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Right)
-                {
-                    mb.Hide();
-                    result = true;
-                }
-                else if (button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Left && LeftButtonClick != null)
-                {
-                    result = LeftButtonClick.Invoke();
-                    if (result)
-                        mb.Hide();
-                }
-                else if (RightButtonClick is not null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Right)
-                {
-                    result = RightButtonClick.Invoke();
-                    if (result)
-                        mb.Hide();
-                }
+                contentDialog.DialogHeight = element.DesiredSize.Height;
+                contentDialog.DialogWidth = element.DesiredSize.Width * 1.2d;
             }
+            bool result = false;
+            while (!(result))
+            {
+                var button = await service.ShowAsync(contentDialog, default);
+
+                bool? isLeft = null;
+                isLeft = button == ContentDialogResult.Primary ?
+                    LeftPrimary :
+                    (button == ContentDialogResult.Secondary ?
+                   !LeftPrimary :
+                    null);
+                if (isLeft == true && LeftButtonClick != null)
+                {
+                    result =  LeftButtonClick.Invoke();
+                }
+                else if (isLeft == false && RightButtonClick != null)
+                    result = RightButtonClick.Invoke();
+
+                else
+                {
+                    result = true;
+                }
+                //if (button == ContentDialogResult.Primary)
+                //{
+                //    result = await DialogParameters.Invoke(parameters.Left);
+                //}
+                //else if (button == ContentDialogResult.Secondary)
+                //{
+                //    result = await DialogParameters.Invoke(parameters.Right);
+                //}
+                //else if (button == ContentDialogResult.None)
+                //{
+                //    result = true;
+                //}
+            }
+            //while (!result)
+            //{
+            //    mb.Hide();
+            //    var button = await mb.ShowAndWaitAsync();
+            //    if (LeftButtonClick is null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Left)
+            //    {
+            //        mb.Hide();
+            //        result = true;
+            //    }
+            //    else if (RightButtonClick is null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Right)
+            //    {
+            //        mb.Hide();
+            //        result = true;
+            //    }
+            //    else if (button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Left && LeftButtonClick != null)
+            //    {
+            //        result = await LeftButtonClick;
+            //        if (result)
+            //            mb.Hide();
+            //    }
+            //    else if (RightButtonClick is not null && button == Wpf.Ui.Controls.Interfaces.IDialogControl.ButtonPressed.Right)
+            //    {
+            //        result = await RightButtonClick;
+            //        if (result)
+            //            mb.Hide();
+            //    }
+            //}
         }
     }
 }

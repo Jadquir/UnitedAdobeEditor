@@ -1,6 +1,6 @@
 ﻿namespace UnitedAdobeEditor.Components.Enums
 {
-    public enum Page
+    public enum PageEnum
     {
         MainMenu,
         Settings,

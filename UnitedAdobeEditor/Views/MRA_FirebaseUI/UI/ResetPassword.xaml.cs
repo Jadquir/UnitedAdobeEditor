@@ -22,7 +22,7 @@ namespace MRA_WPF.Views.Windows.MRA_FirebaseUI.UI
     /// <summary>
     /// Login.xaml etkileşim mantığı
     /// </summary>
-    public partial class ResetPassword : UiPage
+    public partial class ResetPassword : Page
     {
         public ResetPassword()
         {

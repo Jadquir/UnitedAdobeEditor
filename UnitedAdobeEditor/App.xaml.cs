@@ -1,5 +1,6 @@
 ﻿using JadUpdate;
 using Microsoft.Win32;
+using PhotoshopExtractorByJadquir;
 using SingleInstanceCore;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Shapes;
 using UnitedAdobeEditor.Components;
+using UnitedAdobeEditor.Components.ColorChanger;
 using UnitedAdobeEditor.Views.Pages;
+using Wpf.Ui;
 
 namespace UnitedAdobeEditor
 {
@@ -23,7 +26,7 @@ namespace UnitedAdobeEditor
     {
         public static readonly string Name = "United Adobe Editor";
 
-        public static readonly JadUpdate.Class.Version Version = new JadUpdate.Class.Version("1.5", JadUpdate.Class.VersionTag.Beta); 
+        public static readonly JadUpdate.Class.Version Version = new JadUpdate.Class.Version("1.6", JadUpdate.Class.VersionTag.Beta); 
         public static string UpdateUrl = "https://raw.githubusercontent.com/Jadquir/uae-files/main/updates.json";
 
         public static readonly string YoutubeLink = "https://www.youtube.com/channel/UCfFGFB1flw00AiHw_4xYvPw?sub_confirmation=1";
@@ -35,6 +38,10 @@ namespace UnitedAdobeEditor
         public static readonly string CreateSplashScreenLink = "https://bit.ly/47jaqS7";
 
 
+        public const string UserSaveEncryptionKey = "<Encryption Key>";
+        public const string FirebaseApiKey = "<Api Key>";
+        public const string FirebaseAuthDomain = "<Auth Domain>";
+
         public static string? loadedFile;
         private void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -43,6 +50,7 @@ namespace UnitedAdobeEditor
             {
                 TryKillApp();
             }
+            _ = new UiApplication(this);
             string? applicationPath = System.Environment.ProcessPath;
             HandleArgs(e.Args,false);
             //loadedFile = e.Args.FirstOrDefault();

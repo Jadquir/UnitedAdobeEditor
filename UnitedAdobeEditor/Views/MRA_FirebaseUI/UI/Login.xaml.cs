@@ -23,7 +23,7 @@ namespace MRA_WPF.Views.Windows.MRA_FirebaseUI.UI
     /// <summary>
     /// Login.xaml etkileşim mantığı
     /// </summary>
-    public partial class Login : UiPage
+    public partial class Login : Page
     {
         public Login()
         {

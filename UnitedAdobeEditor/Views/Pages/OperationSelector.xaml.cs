@@ -20,7 +20,7 @@ namespace UnitedAdobeEditor.Views.Pages
     /// <summary>
     /// OperationSelector.xaml etkileşim mantığı
     /// </summary>
-    public partial class OperationSelector : UiPage
+    public partial class OperationSelector : Page
     {
         public OperationSelector()
         {

@@ -23,7 +23,7 @@ namespace MRA_WPF.Views.Pages
     /// <summary>
     /// LoadablePage.xaml etkileşim mantığı
     /// </summary>
-    public partial class LoadablePage : UiPage, INotifyPropertyChanged
+    public partial class LoadablePage : Page, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void NotifyPropertyChanged(String propertyName)

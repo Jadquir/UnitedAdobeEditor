@@ -21,13 +21,14 @@ using System.Diagnostics;
 using System.IO;
 using UnitedAdobeEditor.Components.Firebase;
 using MRA_WPF.Views.Windows.MRA_FirebaseUI;
+using TextBlock = Wpf.Ui.Controls.TextBlock;
 
 namespace UnitedAdobeEditor.Views.Pages
 {
     /// <summary>
     /// About.xaml etkileşim mantığı
     /// </summary>
-    public partial class About : UiPage
+    public partial class About : Page
     {
         public static About Instance { get; set; }  
         public About()
@@ -195,7 +196,7 @@ namespace UnitedAdobeEditor.Views.Pages
            await  MessageBoxJ.ShowYesNo("Are you sure you want to sign out?", (s, e) =>
             {
                 signout();
-                MainWindow.Instance.ShowSnackBar("You have signed out!", "Signed out!", icon: Wpf.Ui.Common.SymbolRegular.ArrowExit20);
+                MainWindow.Instance.ShowSnackBar("You have signed out!", "Signed out!", icon: SymbolRegular.ArrowExit20);
 
             });
 

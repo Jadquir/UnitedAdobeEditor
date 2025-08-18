@@ -11,14 +11,17 @@
     x:Name="control"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
     <StackPanel>
         <local1:ExtendedBorder
             x:Name="imageHolder"
             Height="300"
-            Margin="15"
+            Margin="15,0,0,10"
             HorizontalAlignment="Center"
             Background="#FF1F1F23"
+            BorderBrush="#19FFFFFF"
+            BorderThickness="1"
             CornerRadius="10"
             Cursor="Hand"
             EnableChangeBgColor="False">
@@ -75,6 +78,19 @@
         </local1:ExtendedBorder>
         <StackPanel>
             <local1:ExtendedBorder
+                x:Name="saveCurrentImageBorder"
+                Margin="0,0,0,8"
+                HorizontalAlignment="Center"
+                Background="{StaticResource threBrush}"
+                CornerRadius="5"
+                Cursor="Hand"
+                EnableChangeBgColor="True">
+                <ui:Button
+                    Click="SaveCurrentImageClick"
+                    Content="Save Current Image"
+                    Icon="{ui:SymbolIcon Save24}" />
+            </local1:ExtendedBorder>
+            <local1:ExtendedBorder
                 HorizontalAlignment="Center"
                 Background="{StaticResource threBrush}"
                 CornerRadius="5"
@@ -86,7 +102,7 @@
                     ShadowDepth="0"
                     Color="{StaticResource shadowColor}" />
             </local1:ExtendedBorder.Effect>-->
-                <ui:Hyperlink
+                <ui:HyperlinkButton
                     x:Name="hyperlink"
                     Padding="12,7"
                     HorizontalAlignment="Center"
@@ -102,9 +118,7 @@
                 Click="button_Click"
                 Cursor="Hand"
                 Foreground="{Binding Foreground, ElementName=hyperlink}"
-                Icon="Search48"
-                IconFilled="True"
-                IconForeground="{Binding Foreground, ElementName=button}">
+                Icon="{ui:SymbolIcon Search48}">
                 Explore Other Users' Splash Screens
             </ui:Button>
         </StackPanel>

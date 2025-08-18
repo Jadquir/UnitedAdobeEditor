@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UnitedAdobeEditor.Components;
 using UnitedAdobeEditor.Components.Classes;
 
 namespace UnitedAdobeEditor.Views.CustomControls
@@ -37,8 +39,21 @@ namespace UnitedAdobeEditor.Views.CustomControls
         }
         public void Click()
         {
+            try
+            {
+                var title = selectedPath.Title;
+                if (string.IsNullOrEmpty(title))
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                MessageBoxJ.Show("The selected path was not found. Please check the path and try again.");
+                return;
+            }
             CurrentOperation.SelectedPath = selectedPath;
-            MainWindow.Instance.Navigate(Components.Enums.Page.OperationSelector);
+            MainWindow.Instance.Navigate(Components.Enums.PageEnum.OperationSelector);
         }
     }
 }

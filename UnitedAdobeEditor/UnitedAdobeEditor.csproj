@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <Content Include="Alienware-Emblem.ico" />
+    <Content Include="Images\Alienware-Emblem.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,12 +42,13 @@
     <PackageReference Include="PShop.CC.IconResources" Version="1.0.0" />
     <PackageReference Include="SingleInstanceCore" Version="2.2.2" />
     <PackageReference Include="Vestris.ResourceLib" Version="2.1.0" />
-    <PackageReference Include="WPF-UI" Version="2.0.3" />
+    <PackageReference Include="WPF-UI" Version="4.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\JadquirColorPicker\JadquirColorPicker.csproj" />
     <ProjectReference Include="..\JadUpdate\JadUpdate\JadUpdate.csproj" />
+    <ProjectReference Include="..\PhotoshopExtractorByJadquir\PhotoshopExtractorByJadquir.csproj" />
   </ItemGroup>
 
   <ItemGroup>

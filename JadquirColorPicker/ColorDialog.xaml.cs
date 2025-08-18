@@ -21,44 +21,46 @@ namespace JadColorPicker
    /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class ColorDialog : UiWindow
+    public partial class ColorDialog : FluentWindow
     {
         public ColorDialog()
         {
             InitializeComponent();            
             colorPicker.SetOldColor( Color.FromRgb(255,255,255));
-            SetWindowBackdropType(this);
+            ApplyBackground(this);
         }
         public ColorDialog(Color oldColor)
         {
             InitializeComponent();
             colorPicker.SetOldColor(oldColor);
-            SetWindowBackdropType(this);
+            ApplyBackground(this);
 
         }
 
-        public static void SetWindowBackdropType(UiWindow window)
+        public static void ApplyBackground(Window window)
         {
-            BackgroundType type = BackgroundType.Auto;
-            if (Wpf.Ui.Appearance.Background.IsSupported(BackgroundType.Mica))
-            {
-                type = BackgroundType.Mica;
-            }
-            else
-            {
-                type = BackgroundType.None;
-            }
-
             try
             {
-                Debug.WriteLine("Applying Backdrop type : " + type.ToString());
-                Wpf.Ui.Appearance.Background.Apply(window, type);
+                window.Dispatcher.Invoke(() =>
+                {
+                    WindowBackdrop.RemoveBackground(window);
+
+                    var bgType = WindowBackdrop.IsSupported(WindowBackdropType.Mica) ? WindowBackdropType.Mica : WindowBackdropType.None;
+                    if (bgType == WindowBackdropType.None)
+                    {
+                        ApplicationThemeManager.Apply(ApplicationThemeManager.GetAppTheme(), bgType, true);
+                    }
+                    else
+                    {
+
+                        WindowBackdrop.ApplyBackdrop(window, bgType);
+                    }
+                });
             }
             catch (Exception)
             {
 
             }
-            Wpf.Ui.Appearance.Accent.ApplySystemAccent();
         }
         public Color SelectedColor
         {

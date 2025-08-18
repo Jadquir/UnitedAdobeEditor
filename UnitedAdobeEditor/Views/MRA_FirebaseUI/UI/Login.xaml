@@ -1,4 +1,4 @@
-﻿<ui:UiPage
+﻿<Page
     x:Class="MRA_WPF.Views.Windows.MRA_FirebaseUI.UI.Login"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -85,4 +85,4 @@
             </ui:Button>
         </StackPanel>
     </Grid>
-</ui:UiPage>
+</Page>

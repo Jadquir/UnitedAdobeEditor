@@ -21,7 +21,7 @@ namespace UnitedAdobeEditor.Views.Pages
     /// <summary>
     /// AdvancedColors.xaml etkileşim mantığı
     /// </summary>
-    public partial class AdvancedColors : UiPage
+    public partial class AdvancedColors : Page
     {
         public AdvancedColors()
         {
